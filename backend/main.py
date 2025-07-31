@@ -6,6 +6,7 @@ import shutil
 import json
 from pathlib import Path
 import subprocess
+from typing import List
 
 app = FastAPI()
 
@@ -24,34 +25,21 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 @app.post("/upload/")
-async def upload_pdf(file: UploadFile = File(...)):
-    file_path = UPLOAD_DIR / file.filename
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    return {"filename": file.filename}
-
-@app.post("/analyze/")
-async def analyze(
-    persona: str = Form(...),
-    job: str = Form(...),
-    files: str = Form(...)
+async def upload_files(
+    pdfs: List[UploadFile] = File(...),
+    input_json: UploadFile = File(...)
 ):
-    file_list = files.split(",")
-    challenge_input = {
-        "persona": {"role": persona},
-        "job_to_be_done": {"task": job},
-        "documents": [{"filename": f} for f in file_list]
-    }
-    input_json_path = UPLOAD_DIR / "challenge1b_input.json"
-    with open(input_json_path, "w") as f:
-        json.dump(challenge_input, f)
-    # Run your pipeline
-    result = subprocess.run(
-        ["python", "process_pdfs.py"],
-        cwd=BASE_DIR,  # Make sure to run from backend dir!
-        capture_output=True,
-        text=True
-    )
+    # Save PDFs
+    for pdf in pdfs:
+        file_path = UPLOAD_DIR / pdf.filename
+        with open(file_path, "wb") as f:
+            f.write(await pdf.read())
+    # Save JSON
+    json_path = UPLOAD_DIR / "challenge1b_input.json"
+    with open(json_path, "wb") as f:
+        f.write(await input_json.read())
+    return {"message": "Files received"}
+
     if result.returncode != 0:
         return JSONResponse(status_code=500, content={"error": result.stderr})
     output_json_path = OUTPUT_DIR / "challenge1b_output.json"
