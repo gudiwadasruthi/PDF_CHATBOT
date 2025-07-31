@@ -39,7 +39,7 @@ async def upload_files(
     with open(json_path, "wb") as f:
         f.write(await input_json.read())
     return {"message": "Files received"}
-
+    
     if result.returncode != 0:
         return JSONResponse(status_code=500, content={"error": result.stderr})
     output_json_path = OUTPUT_DIR / "challenge1b_output.json"
