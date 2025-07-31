@@ -1,0 +1,22 @@
+# === Core PDF Extraction Libraries (Stage 1) ===
+# For low-level PDF parsing, text extraction, and rendering for OCR
+PyMuPDF==1.24.1
+# For high-level table detection
+pdfplumber==0.11.0
+# For image handling, required by the OCR pipeline
+Pillow==10.3.0
+# For interfacing with the Tesseract OCR engine
+pytesseract==0.3.10
+
+# === Semantic Analysis & NLP Libraries (Stage 2) ===
+# The core library for generating sentence embeddings
+sentence-transformers==2.7.0
+# The deep learning framework required by sentence-transformers
+torch==2.3.0
+# For fast mathematical operations like cosine similarity
+scikit-learn==1.4.2
+# For Natural Language Processing (used for query expansion)
+nltk==3.8.1
+fastapi
+uvicorn
+python-multipart
