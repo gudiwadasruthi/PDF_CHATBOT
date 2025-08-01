@@ -24,36 +24,59 @@ OUTPUT_DIR = BASE_DIR / "output"
 UPLOAD_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 @app.post("/upload/")
 async def upload_files(
     pdfs: List[UploadFile] = File(...),
     input_json: UploadFile = File(...)
 ):
-    # Save PDFs
-    for pdf in pdfs:
-        file_path = UPLOAD_DIR / pdf.filename
-        with open(file_path, "wb") as f:
-            f.write(await pdf.read())
-    # Save JSON
-    json_path = UPLOAD_DIR / "challenge1b_input.json"
-    with open(json_path, "wb") as f:
-        f.write(await input_json.read())
-    # Run your processing script
-    result = subprocess.run(
-        ["python", "process_pdfs.py"],
-        cwd=BASE_DIR,
-        capture_output=True,
-        text=True
-    )
-    if result.returncode != 0:
-        return JSONResponse(status_code=500, content={"error": result.stderr})
-    # Return output JSON
-    output_json_path = OUTPUT_DIR / "challenge1b_output.json"
-    if output_json_path.exists():
-        with open(output_json_path) as f:
-            return json.load(f)
-    return {"status": "done", "message": "Analysis complete, but no output file found."}
+    try:
+        # Save PDFs
+        for pdf in pdfs:
+            file_path = UPLOAD_DIR / pdf.filename
+            with open(file_path, "wb") as f:
+                f.write(await pdf.read())
+            logging.info(f"Saved PDF: {pdf.filename}")
 
+        # Save JSON
+        json_path = UPLOAD_DIR / "challenge1b_input.json"
+        with open(json_path, "wb") as f:
+            f.write(await input_json.read())
+        logging.info(f"Saved input JSON at: {json_path}")
+
+        # Run processing script
+        result = subprocess.run(
+            ["python", "process_pdfs.py"],
+            cwd=BASE_DIR,
+            capture_output=True,
+            text=True
+        )
+        logging.info(f"STDOUT: {result.stdout}")
+        logging.info(f"STDERR: {result.stderr}")
+
+        if result.returncode != 0:
+            logging.error(f"Process failed with code {result.returncode}")
+            return JSONResponse(status_code=500, content={
+                "error": result.stderr,
+                "stdout": result.stdout
+            })
+
+        # Return output JSON
+        output_json_path = OUTPUT_DIR / "challenge1b_output.json"
+        if output_json_path.exists():
+            with open(output_json_path) as f:
+                return json.load(f)
+
+        return {"status": "done", "message": "Analysis complete, but no output file found."}
+
+    except Exception as e:
+        import traceback
+        logging.error("❌ Exception occurred: %s", traceback.format_exc())
+        return JSONResponse(status_code=500, content={"error": str(e)})
+        
 @app.get("/")
 def root():
     return {"status": "Backend is running"}
