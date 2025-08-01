@@ -47,13 +47,15 @@ async def upload_files(
             f.write(await input_json.read())
         logging.info(f"Saved input JSON at: {json_path}")
 
-        # Run processing script
+        import sys
+        logging.info("About to run process_pdfs.py subprocess...")
         result = subprocess.run(
-            ["python", "process_pdfs.py"],
+            [sys.executable, "process_pdfs.py"],
             cwd=BASE_DIR,
             capture_output=True,
             text=True
         )
+        logging.info("Subprocess finished.")
         logging.info(f"STDOUT: {result.stdout}")
         logging.info(f"STDERR: {result.stderr}")
 
