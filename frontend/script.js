@@ -247,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         progressTextPanel.textContent = '0%';
         analyzeBtnPanel.disabled = true;
         status.textContent = 'Analyzing...';
+        await new Promise(r => setTimeout(r, 0));
         try {
             const response = await fetch('https://pdf-chatbot-69qo.onrender.com/upload/', {
                 method: 'POST',
