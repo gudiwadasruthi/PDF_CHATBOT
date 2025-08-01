@@ -38,10 +38,16 @@ async def upload_files(
     json_path = UPLOAD_DIR / "challenge1b_input.json"
     with open(json_path, "wb") as f:
         f.write(await input_json.read())
-    return {"message": "Files received"}
-    
+    # Run your processing script
+    result = subprocess.run(
+        ["python", "process_pdfs.py"],
+        cwd=BASE_DIR,
+        capture_output=True,
+        text=True
+    )
     if result.returncode != 0:
         return JSONResponse(status_code=500, content={"error": result.stderr})
+    # Return output JSON
     output_json_path = OUTPUT_DIR / "challenge1b_output.json"
     if output_json_path.exists():
         with open(output_json_path) as f:
