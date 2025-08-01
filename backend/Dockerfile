@@ -32,4 +32,4 @@ RUN python setup_offline_assets.py
 COPY *.py ./
 
 # --- 7. DEFINE THE RUN COMMAND ---
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "env:PORT"]
