@@ -17,6 +17,8 @@ torch==2.3.0
 scikit-learn==1.4.2
 # For Natural Language Processing (used for query expansion)
 nltk==3.8.1
+# Pin numpy version for compatibility
+numpy<2.0
 fastapi
 uvicorn
 python-multipart

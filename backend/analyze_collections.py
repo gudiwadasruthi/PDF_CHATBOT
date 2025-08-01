@@ -143,11 +143,17 @@ def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_
     
     # Load the model with error handling
     try:
-        model = SentenceTransformer(
-            model_name,
-            cache_folder=cache_folder,
-            device='cpu'  # Force CPU for consistency between environments
-        )
+        # Prefer absolute path if model is pre-downloaded in Docker
+        abs_model_path = "/app/model_cache/intfloat_e5-base-v2"
+        if os.path.exists(abs_model_path):
+            print(f"  - Loading model from absolute path: {abs_model_path}")
+            model = SentenceTransformer(abs_model_path, device='cpu')
+        else:
+            model = SentenceTransformer(
+                model_name,
+                cache_folder=cache_folder,
+                device='cpu'  # Force CPU for consistency between environments
+            )
         print("  - Model loaded successfully")
     except Exception as e:
         print(f"  - Error loading model: {str(e)}")

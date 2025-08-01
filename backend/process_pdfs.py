@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+print("🟢 Starting process_pdfs.py", flush=True)
 import json
 from heading_extractor import extract_outline
 from analyze_collections import analyze_collection

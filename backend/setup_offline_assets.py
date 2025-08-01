@@ -48,13 +48,15 @@ def download_model():
         
         # Download the model
         model = SentenceTransformer(model_name, cache_folder=cache_dir)
-        
+        # Explicitly save model to absolute path for Docker
+        abs_save_path = "/app/model_cache/intfloat_e5-base-v2"
+        model.save(abs_save_path)
+        logger.info(f"Model explicitly saved to {abs_save_path}")
         # Verify the model files
-        model_files = os.listdir(os.path.join(cache_dir, 'intfloat_e5-base-v2'))
+        model_files = os.listdir(abs_save_path)
         if not model_files:
-            raise Exception("No model files found after download")
-            
-        logger.info(f"Model downloaded successfully. Found {len(model_files)} files in cache.")
+            raise Exception("No model files found after download/save")
+        logger.info(f"Model downloaded and saved successfully. Found {len(model_files)} files in cache.")
         return True
     except Exception as e:
         logger.error(f"Error downloading model: {str(e)}")
