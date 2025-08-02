@@ -1,5 +1,9 @@
 import sys
 from pathlib import Path
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.info("Starting process_pdfs.py")
+
 print("🟢 Starting process_pdfs.py", flush=True)
 import json
 from heading_extractor import extract_outline

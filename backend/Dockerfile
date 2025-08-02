@@ -14,6 +14,10 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /app/model_cache /app/nltk_data /app/input /app/output \
     && chmod -R 777 /app/model_cache /app/nltk_data /app/input /app/output
 
+# --- 2b. COPY PRE-DOWNLOADED MODELS AND DATA ---
+COPY ./model_cache /app/model_cache
+COPY ./nltk_data /app/nltk_data
+
 # --- 3. ENVIRONMENT VARIABLES ---
 ENV SENTENCE_TRANSFORMERS_HOME=/app/model_cache
 ENV TRANSFORMERS_CACHE=/app/model_cache
@@ -33,7 +37,10 @@ COPY ./setup_offline_assets.py ./setup_offline_assets.py
 # --- 5. INSTALL PYTHON DEPENDENCIES ---
 RUN pip install --no-cache-dir -r requirements.txt
 
-# --- 6. DOWNLOAD OFFLINE ASSETS ---
+# --- 6. (OPTIONAL) DOWNLOAD OFFLINE ASSETS ---
+# (Commented out because models/data are now copied)
+# RUN python setup_offline_assets.py
+
 COPY setup_offline_assets.py .
 RUN python setup_offline_assets.py
 
