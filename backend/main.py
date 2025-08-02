@@ -72,7 +72,6 @@ async def upload_files(
         logging.info(f"[DEBUG] Environment variables: {os.environ}")
         cmd = [sys.executable, str(script_path)]
         logging.info(f"[DEBUG] Subprocess command: {cmd}")
-        import os
         logging.info(f"[DEBUG] process_pdfs.py permissions: {oct(os.stat(script_path).st_mode)}")
         logging.info(f"[DEBUG] process_pdfs.py owner: {os.stat(script_path).st_uid}")
         logging.info(f"[DEBUG] process_pdfs.py size: {os.path.getsize(script_path)} bytes")
