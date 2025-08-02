@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://pdf-chatbot-chi.vercel.app"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -85,4 +85,4 @@ def root():
 
 @app.head("/")
 def health_check():
-    return JSONResponse(status_code=200)
+    return JSONResponse(content={"status": "ok"}, status_code=200)
