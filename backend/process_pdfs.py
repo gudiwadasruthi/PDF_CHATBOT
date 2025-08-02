@@ -1,3 +1,5 @@
+print("🟢 Starting process_pdfs.py", flush=True)
+
 import sys
 from pathlib import Path
 import logging
@@ -7,7 +9,6 @@ import json
 logging.basicConfig(level=logging.INFO)
 logging.info("📦 Starting process_pdfs.py")
 
-print("🟢 Starting process_pdfs.py", flush=True)
 
 try:
     from heading_extractor import extract_outline
@@ -72,7 +73,9 @@ def main():
         print("📁 Stage 1 (outline extraction) results are available in:", intermediate_dir, flush=True)
 
 
+print("DEBUG: process_pdfs.py loaded", flush=True)
 if __name__ == '__main__':
+    print("DEBUG: __main__ block entered", flush=True)
     try:
         main()
     except Exception as e:
