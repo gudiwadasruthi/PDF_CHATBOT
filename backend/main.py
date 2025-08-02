@@ -49,23 +49,23 @@ async def upload_files(
         logging.info(f"Saved input JSON at: {json_path}")
 
         #Temporarily skip process_pdfs.py execution
-         logging.info("About to run process_pdfs.py subprocess...")
-         result = subprocess.run(
-             [sys.executable, "process_pdfs.py"],
-             cwd=BASE_DIR,
-             capture_output=True,
-             text=True
-         )
-         logging.info("Subprocess finished.")
-         logging.info(f"STDOUT: {result.stdout}")
-         logging.info(f"STDERR: {result.stderr}")
+        logging.info("About to run process_pdfs.py subprocess...")
+        result = subprocess.run(
+            [sys.executable, "process_pdfs.py"],
+            cwd=BASE_DIR,
+            capture_output=True,
+            text=True
+        )
+        logging.info("Subprocess finished.")
+        logging.info(f"STDOUT: {result.stdout}")
+        logging.info(f"STDERR: {result.stderr}")
 
-         if result.returncode != 0:
-             logging.error(f"Process failed with code {result.returncode}")
-             return JSONResponse(status_code=500, content={
-                 "error": result.stderr,
-                 "stdout": result.stdout
-             })
+        if result.returncode != 0:
+            logging.error(f"Process failed with code {result.returncode}")
+            return JSONResponse(status_code=500, content={
+                "error": result.stderr,
+                "stdout": result.stdout
+            })
 
         # Mocked response for now
         return {"status": "upload success", "message": "PDFs and JSON uploaded. Skipped analysis step."}
