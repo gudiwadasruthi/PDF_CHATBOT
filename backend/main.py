@@ -82,3 +82,7 @@ async def upload_files(
 @app.get("/")
 def root():
     return {"status": "Backend is running"}
+
+@app.head("/")
+def health_check():
+    return JSONResponse(status_code=200)
