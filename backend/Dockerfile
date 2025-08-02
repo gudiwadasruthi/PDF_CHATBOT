@@ -28,7 +28,7 @@ COPY ./analyze_collections.py ./analyze_collections.py
 COPY ./heading_extractor.py ./heading_extractor.py
 COPY ./requirements.txt ./requirements.txt
 COPY ./setup_offline_assets.py ./setup_offline_assets.py
-        
+COPY ./debug_script.py ./debug_script.py 
 
 # --- 5. INSTALL PYTHON DEPENDENCIES ---
 RUN pip install --no-cache-dir -r requirements.txt
