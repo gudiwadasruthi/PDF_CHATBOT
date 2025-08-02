@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import subprocess
 from typing import List
+import sys
 
 app = FastAPI()
 
@@ -48,7 +49,6 @@ async def upload_files(
         logging.info(f"Saved input JSON at: {json_path}")
 
         #Temporarily skip process_pdfs.py execution
-         import sys
          logging.info("About to run process_pdfs.py subprocess...")
          result = subprocess.run(
              [sys.executable, "process_pdfs.py"],
