@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         status.textContent = 'Analyzing...';
         await new Promise(r => setTimeout(r, 0));
         try {
-            const response = await fetch('https://pdf-chatbot-69qo.onrender.com', {
+            const response = await fetch('https://pdf-chatbot-69qo.onrender.com/upload/', {
                 method: 'POST',
                 body: formData
             });
