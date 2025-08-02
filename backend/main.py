@@ -52,7 +52,7 @@ async def upload_files(
         logging.info(f"🧾 Saved input JSON at: {json_path}")
 
         # -------- Run process_pdfs.py --------
-        script_path = BASE_DIR / "process_pdfs.py"
+        script_path = BASE_DIR / "debug_script.py"
         if not script_path.exists():
             raise FileNotFoundError(f"{script_path} not found")
 
