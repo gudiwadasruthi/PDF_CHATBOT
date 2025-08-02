@@ -9,14 +9,15 @@ import json
 logging.basicConfig(level=logging.INFO)
 logging.info("📦 Starting process_pdfs.py")
 
-print("🧪 Testing heading_extractor", flush=True)
+
+print("🧪 Testing analyze_collections", flush=True)
 
 try:
-    from heading_extractor import extract_outline
-    print("✅ heading_extractor import succeeded", flush=True)
+    from analyze_collections import analyze_collection
+    print("✅ analyze_collections import succeeded", flush=True)
 except Exception as e:
-    print(f"❌ heading_extractor import failed: {e}", file=sys.stderr, flush=True)
-    logging.exception("❌ heading_extractor crashed")
+    print(f"❌ analyze_collections import failed: {e}", file=sys.stderr, flush=True)
+    logging.exception("❌ analyze_collections crashed")
     sys.exit(1)
 
 
