@@ -1,5 +1,5 @@
 print("🟢 Starting process_pdfs.py", flush=True)
-
+print("=== MINIMAL process_pdfs.py RUNNING ===", flush=True)
 import sys
 from pathlib import Path
 import logging
@@ -10,13 +10,14 @@ logging.basicConfig(level=logging.INFO)
 logging.info("📦 Starting process_pdfs.py")
 
 
-try:
-    from heading_extractor import extract_outline
-    from analyze_collections import analyze_collection
-except Exception as e:
-    print(f"❌ Import failure: {e}", file=sys.stderr, flush=True)
-    logging.exception("❌ Import error in process_pdfs.py")
-    sys.exit(1)
+# [DEBUG] Heavy imports temporarily commented out for OOM test
+# try:
+#     from heading_extractor import extract_outline
+#     from analyze_collections import analyze_collection
+# except Exception as e:
+#     print(f"❌ Import failure: {e}", file=sys.stderr, flush=True)
+#     logging.exception("❌ Import error in process_pdfs.py")
+#     sys.exit(1)
 
 # Define paths
 BASE_DIR = Path(__file__).parent
