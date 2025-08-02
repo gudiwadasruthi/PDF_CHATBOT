@@ -1,5 +1,3 @@
-print("🟢 Starting process_pdfs.py", flush=True)
-print("=== MINIMAL process_pdfs.py RUNNING ===", flush=True)
 import sys
 from pathlib import Path
 import logging
@@ -8,63 +6,51 @@ import json
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logging.info("📦 Starting process_pdfs.py")
-
-
-print("🧪 Testing analyze_collections", flush=True)
-
-try:
-    from analyze_collections import analyze_collection
-    print("✅ analyze_collections import succeeded", flush=True)
-except Exception as e:
-    print(f"❌ analyze_collections import failed: {e}", file=sys.stderr, flush=True)
-    logging.exception("❌ analyze_collections crashed")
-    sys.exit(1)
-
-
-
+print("🟢 Starting process_pdfs.py", flush=True)
 
 # Define paths
 BASE_DIR = Path(__file__).parent
 input_dir = BASE_DIR / "input"
 output_dir = BASE_DIR / "output"
 
-
 def main():
-    """
-    Main function to run the entire two-stage hackathon pipeline.
-    """
     print("🏁 Entered main() in process_pdfs.py", flush=True)
     print(f"📂 Input directory: {input_dir.resolve()}", flush=True)
     print(f"📂 Output directory: {output_dir.resolve()}", flush=True)
 
-    # Define a temporary, intermediate directory for the 1A results
+    # --- STAGE 1 ---
+    try:
+        from heading_extractor import extract_outline  # 👈 Lazy import
+    except Exception as e:
+        print(f"❌ Failed to import heading_extractor: {e}", file=sys.stderr, flush=True)
+        return
+
     intermediate_dir = output_dir / "1a_outlines"
     intermediate_dir.mkdir(parents=True, exist_ok=True)
 
-    if not any(input_dir.iterdir()):
-        print("⚠️  Warning: Input directory is empty. Nothing to process.", file=sys.stderr, flush=True)
-        return
-
-    # --- STAGE 1: PDF EXTRACTION (ROUND 1A) ---
-    print("\n🚧 Starting Stage 1: PDF Structure Extraction", flush=True)
     pdf_files = list(input_dir.glob("*.pdf"))
     if not pdf_files:
-        print("⚠️  Warning: No PDF files found in input directory.", file=sys.stderr, flush=True)
+        print("⚠️ No PDFs to process", file=sys.stderr, flush=True)
     else:
         for pdf_file in pdf_files:
-            print(f"  🔍 Processing: {pdf_file.name}", flush=True)
+            print(f"🔍 Processing {pdf_file.name}", flush=True)
             try:
                 extracted_data = extract_outline(str(pdf_file))
-                output_file_path = intermediate_dir / f"{pdf_file.stem}.json"
-                with open(output_file_path, 'w', encoding='utf-8') as f:
+                with open(intermediate_dir / f"{pdf_file.stem}.json", 'w', encoding='utf-8') as f:
                     json.dump(extracted_data, f, indent=4)
             except Exception as e:
-                print(f"[ERROR] ❌ Failed during Stage 1 processing of {pdf_file.name}: {e}", file=sys.stderr, flush=True)
+                print(f"[ERROR] ❌ Failed Stage 1 for {pdf_file.name}: {e}", file=sys.stderr, flush=True)
 
-    # --- STAGE 2: SEMANTIC ANALYSIS (ROUND 1B) ---
+    # --- STAGE 2 ---
     input_config_path = input_dir / "challenge1b_input.json"
     if input_config_path.exists():
-        print("\n🚀 Starting Stage 2: Semantic Analysis", flush=True)
+        try:
+            from analyze_collections import analyze_collection  # 👈 Lazy import after Stage 1
+        except Exception as e:
+            print(f"❌ Failed to import analyze_collections: {e}", file=sys.stderr, flush=True)
+            return
+
+        print("🚀 Starting Stage 2: Semantic Analysis", flush=True)
         try:
             analyze_collection(
                 input_config_path=input_config_path,
@@ -72,18 +58,15 @@ def main():
                 output_dir=output_dir
             )
         except Exception as e:
-            print(f"[ERROR] ❌ Failed during Stage 2 analysis: {e}", file=sys.stderr, flush=True)
+            print(f"[ERROR] ❌ Failed during Stage 2: {e}", file=sys.stderr, flush=True)
     else:
-        print("\nℹ️ Info: `challenge1b_input.json` not found. Skipping Stage 2 analysis.", flush=True)
-        print("📁 Stage 1 (outline extraction) results are available in:", intermediate_dir, flush=True)
+        print("ℹ️ challenge1b_input.json not found — skipping Stage 2", flush=True)
 
 
-print("DEBUG: process_pdfs.py loaded", flush=True)
 if __name__ == '__main__':
-    print("DEBUG: __main__ block entered", flush=True)
     try:
         main()
     except Exception as e:
-        logging.error("❌ Unhandled Exception in process_pdfs.py: %s", e, exc_info=True)
+        logging.error("❌ Unhandled exception in process_pdfs.py", exc_info=True)
         print(f"[CRITICAL] ❌ Unhandled exception: {e}", file=sys.stderr, flush=True)
         sys.exit(1)
