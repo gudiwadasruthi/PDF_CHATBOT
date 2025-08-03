@@ -149,7 +149,7 @@ def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_
     # --- ENHANCED MODEL LOADING WITH FALLBACKS ---
     print("Loading semantic analysis model...")
     from sentence_transformers import SentenceTransformer
-    model_name = 'intfloat/e5-base-v2'
+    model_name = 'all-MiniLM-L6-v2'
     
     # Check multiple possible cache locations
     possible_cache_folders = [
