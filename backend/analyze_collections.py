@@ -1,14 +1,9 @@
 # analyze_collections.py (Final, Docker-Ready Modular Version)
-
 import json
 from pathlib import Path
-from sentence_transformers import SentenceTransformer, util
-import torch
 import datetime
 import sys
 import os
-import nltk
-from nltk.corpus import wordnet
 
 # --- ENVIRONMENT-AWARE NLP SETUP ---
 # Always use paths relative to the script location
@@ -50,6 +45,7 @@ def expand_query_with_nlp(persona, job_to_be_done):
 
 def load_sections(documents, rich_sections_dir):
     """Loads all pre-processed sections from the intermediate JSON files."""
+    from pathlib import Path
     all_sections = []
     for doc_info in documents:
         rich_json_path = rich_sections_dir / f"{Path(doc_info['filename']).stem}.json"
@@ -64,6 +60,7 @@ def load_sections(documents, rich_sections_dir):
 
 def rank_sections(all_sections, query_embedding, model):
     """Performs the two-level ranking and returns the top sections."""
+    from sentence_transformers import util
     section_titles = [s['section_title'] for s in all_sections]
     section_contents = [s.get('content', '') for s in all_sections]
 
@@ -123,6 +120,7 @@ def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_
 
     # --- ENHANCED MODEL LOADING WITH FALLBACKS ---
     print("Loading semantic analysis model...")
+    from sentence_transformers import SentenceTransformer
     model_name = 'intfloat/e5-base-v2'
     
     # Check multiple possible cache locations

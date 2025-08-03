@@ -1,9 +1,5 @@
 import fitz  # PyMuPDF
-import pdfplumber
 import re
-from PIL import Image
-import pytesseract
-import io
 from difflib import SequenceMatcher
 from pathlib import Path
 
@@ -43,6 +39,7 @@ def get_true_table_bboxes(plumber_page, fitz_page):
     Identifies "true" tables by robustly filtering out single-cell boxes that
     are visually identifiable as styled headings.
     """
+    import pdfplumber
     true_table_bboxes = []
     # We need the page's base font size to know if text is "larger than normal".
     base_font_size = get_base_font_size(fitz_page) 
@@ -580,6 +577,9 @@ def ocr_page(fitz_page, dpi=300):
     Performs OCR on a Fitz page object at a specified DPI.
     """
     try:
+        from PIL import Image
+        import pytesseract
+        import io
         pix = fitz_page.get_pixmap(dpi=dpi)
         img_data = pix.tobytes("png")
         image = Image.open(io.BytesIO(img_data))
