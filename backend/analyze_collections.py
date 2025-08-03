@@ -4,6 +4,7 @@ from pathlib import Path
 import datetime
 import sys
 import os
+import nltk
 
 
 # --- ENVIRONMENT-AWARE NLP SETUP ---
@@ -110,7 +111,6 @@ def build_output(documents, persona, job, top_extracted, top_content):
 # --- THE MAIN CONDUCTOR FUNCTION ---
 
 def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_dir: Path):
-    import nltk
     """
     Orchestrates the entire analysis pipeline, from loading to saving the final output.
     """
