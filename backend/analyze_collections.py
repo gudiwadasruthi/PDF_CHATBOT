@@ -46,19 +46,45 @@ def expand_query_with_nlp(persona, job_to_be_done):
     return base_query + persona_enrichment
 
 def load_sections(documents, rich_sections_dir):
-    """Loads all pre-processed sections from the intermediate JSON files."""
+    """
+    Loads all pre-processed sections from the intermediate JSON files.
+    Adds debug output to help trace loading issues.
+    """
     from pathlib import Path
+    import traceback
+
     all_sections = []
+    print(f"\n🔍 [Stage 2] Starting to load intermediate section files from: {rich_sections_dir.resolve()}", flush=True)
+
     for doc_info in documents:
-        rich_json_path = rich_sections_dir / f"{Path(doc_info['filename']).stem}.json"
-        if rich_json_path.exists():
+        doc_name = doc_info['filename']
+        rich_json_path = rich_sections_dir / f"{Path(doc_name).stem}.json"
+
+        print(f"📄 Looking for: {rich_json_path}", flush=True)
+
+        if not rich_json_path.exists():
+            print(f"⚠️ File not found for document: {doc_name}", flush=True)
+            continue
+
+        try:
             with open(rich_json_path, 'r', encoding='utf-8') as f:
                 rich_data = json.load(f)
-            for section in rich_data.get("outline", []):
-                section['document'] = doc_info['filename']
+            
+            sections = rich_data.get("outline", [])
+            print(f"✅ Loaded {len(sections)} sections from {rich_json_path.name}", flush=True)
+
+            for section in sections:
+                section['document'] = doc_name
                 section['section_title'] = section.pop('text')
                 all_sections.append(section)
+
+        except Exception as e:
+            print(f"❌ Failed to load or parse {rich_json_path.name}: {str(e)}", file=sys.stderr, flush=True)
+            traceback.print_exc()
+
+    print(f"\n📊 Total sections loaded across all documents: {len(all_sections)}\n", flush=True)
     return all_sections
+
 
 def rank_sections(all_sections, query_embedding, model):
     """Performs the two-level ranking and returns the top sections."""

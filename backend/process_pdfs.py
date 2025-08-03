@@ -65,11 +65,22 @@ def main():
     if input_config_path.exists():
         try:
             from analyze_collections import analyze_collection  # 👈 Lazy import after Stage 1
+            print("✅ Successfully imported analyze_collection from analyze_collections", flush=True)
         except Exception as e:
             print(f"❌ Failed to import analyze_collections: {e}", file=sys.stderr, flush=True)
             return
 
-        print("🚀 Starting Stage 2: Semantic Analysis", flush=True)
+        print("\n🚀 Starting Stage 2: Semantic Analysis", flush=True)
+        
+        # 🔍 Add these debug lines:
+        print(f"📥 Input config path: {input_config_path.resolve()}", flush=True)
+        print(f"📂 Rich sections dir: {intermediate_dir.resolve()}", flush=True)
+        print(f"📂 Output dir for final JSON: {output_dir.resolve()}", flush=True)
+
+        print(f"📦 Listing JSON files in {intermediate_dir}:", flush=True)
+        for f in intermediate_dir.glob("*.json"):
+            print(f"   - {f.name}", flush=True)
+
         try:
             analyze_collection(
                 input_config_path=input_config_path,
