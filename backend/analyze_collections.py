@@ -4,6 +4,7 @@ from pathlib import Path
 import datetime
 import sys
 import os
+import nltk
 
 # --- ENVIRONMENT-AWARE NLP SETUP ---
 # Always use paths relative to the script location
