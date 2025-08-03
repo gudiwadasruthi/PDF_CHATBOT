@@ -5,6 +5,12 @@ import datetime
 import sys
 import os
 import nltk
+import psutil
+
+def log_memory_usage(stage=""):
+    process = psutil.Process(os.getpid())
+    mem_mb = process.memory_info().rss / 1024 / 1024
+    print(f"[MEMORY] {stage} - RSS: {mem_mb:.2f} MB", flush=True)
 
 
 # --- ENVIRONMENT-AWARE NLP SETUP ---
@@ -140,6 +146,7 @@ def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_
     """
     Orchestrates the entire analysis pipeline, from loading to saving the final output.
     """
+    log_memory_usage("START Stage 2")
     print(f"\n--- Starting Stage 2: Deep Semantic Analysis for {input_config_path.parent.name} ---")
 
     with open(input_config_path, 'r', encoding='utf-8') as f:
@@ -149,48 +156,27 @@ def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_
     # --- ENHANCED MODEL LOADING WITH FALLBACKS ---
     print("Loading semantic analysis model...")
     from sentence_transformers import SentenceTransformer
-    model_name = 'all-MiniLM-L6-v2'
+    model_name = 'paraphrase-MiniLM-L3-v2'
     
     # Check multiple possible cache locations
     possible_cache_folders = [
-        os.getenv("SENTENCE_TRANSFORMERS_HOME"),
-        os.getenv("TRANSFORMERS_CACHE"),
-        "/app/model_cache",  # Docker default
-        os.path.expanduser("~/.cache/huggingface/hub"),  # Local default
+        str(Path(os.getenv('SENTENCE_TRANSFORMERS_HOME', '/app/model_cache'))),
+        str(rich_sections_dir.parent / "model_cache"),
+        str(Path.home() / ".cache" / "sentence_transformers")
     ]
-    
-    # Find the first existing cache folder
-    cache_folder = None
-    for folder in possible_cache_folders:
-        if folder and os.path.exists(folder):
-            cache_folder = folder
-            print(f"  - Using cache folder: {cache_folder}")
-            break
-    
-    # Load the model with error handling
-    try:
-        # Prefer absolute path if model is pre-downloaded in Docker
-        abs_model_path = "/app/model_cache/intfloat_e5-base-v2"
-        if os.path.exists(abs_model_path):
-            print(f"  - Loading model from absolute path: {abs_model_path}")
-            model = SentenceTransformer(abs_model_path, device='cpu')
-        else:
-            model = SentenceTransformer(
-                model_name,
-                cache_folder=cache_folder,
-                device='cpu'  # Force CPU for consistency between environments
-            )
-        print("  - Model loaded successfully")
-    except Exception as e:
-        print(f"  - Error loading model: {str(e)}")
-        print("  - Attempting to load model without cache...")
+    model = None
+    for cache_folder in possible_cache_folders:
         try:
-            model = SentenceTransformer(model_name, device='cpu')
-            print("  - Model loaded without cache")
-        except Exception as e2:
-            print(f"  - Critical: Failed to load model: {str(e2)}")
-            print("  - The application cannot continue without the model.")
-            raise
+            print(f"Trying to load model from cache: {cache_folder}")
+            model = SentenceTransformer(model_name, cache_folder=cache_folder)
+            print(f"✅ Model loaded from {cache_folder}")
+            log_memory_usage("AFTER MODEL LOAD")
+            break
+        except Exception as e:
+            print(f"❌ Failed to load model from {cache_folder}: {e}")
+    if model is None:
+        print("❌ All attempts to load the model failed.", file=sys.stderr)
+        return
     # -----------------------------------------------------------
 
     expanded_query = expand_query_with_nlp(persona, job)
@@ -198,11 +184,13 @@ def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_
     query_embedding = model.encode("query: " + expanded_query, convert_to_tensor=True, show_progress_bar=False)
 
     all_sections = load_sections(documents, rich_sections_dir)
+    log_memory_usage("AFTER SECTION LOAD")
     if not all_sections:
         print("Error: No sections were found in the pre-processed files.", file=sys.stderr)
         return
 
     top_extracted, top_content = rank_sections(all_sections, query_embedding, model)
+    log_memory_usage("AFTER SEMANTIC RANKING")
     output_json = build_output(documents, persona, job, top_extracted, top_content)
 
     output_path = output_dir / "challenge1b_output.json"
@@ -210,6 +198,7 @@ def analyze_collection(input_config_path: Path, rich_sections_dir: Path, output_
         json.dump(output_json, f, indent=4)
 
     print(f"Analysis complete. Final Round 1B output saved to {output_path}")
+    log_memory_usage("END Stage 2")
 
 # --- LOCAL TESTING HARNESS (UNCHANGED) ---
 if __name__ == '__main__':

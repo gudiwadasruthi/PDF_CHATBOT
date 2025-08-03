@@ -34,7 +34,7 @@ def setup_directories():
 
 def download_model():
     """Download and cache the sentence transformer model."""
-    model_name = 'all-MiniLM-L6-v2'
+    model_name = 'paraphrase-MiniLM-L3-v2'
     cache_dir = os.getenv('SENTENCE_TRANSFORMERS_HOME', '/app/model_cache')
     
     logger.info(f"Downloading model '{model_name}' to: {cache_dir}")
@@ -49,7 +49,7 @@ def download_model():
         # Download the model
         model = SentenceTransformer(model_name, cache_folder=cache_dir)
         # Explicitly save model to absolute path for Docker
-        abs_save_path = "/app/model_cache/all-MiniLM-L6-v2"
+        abs_save_path = "/app/model_cache/paraphrase-MiniLM-L3-v2"
         model.save(abs_save_path)
         logger.info(f"Model explicitly saved to {abs_save_path}")
         # Verify the model files
