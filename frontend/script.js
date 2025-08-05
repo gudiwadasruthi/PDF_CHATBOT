@@ -38,19 +38,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Show the split viewer with PDF and refined text
     function showSplitViewer(refinedText, pdfUrl, pageNumber) {
-        document.getElementById("split-viewer").classList.remove("hidden");
+        const splitViewer = document.getElementById("split-viewer");
+        splitViewer.classList.remove("hidden");
         document.getElementById("refined-text-panel").textContent = refinedText || "No content available.";
         loadPDFInViewer(pdfUrl, pageNumber);
+        // Optionally scroll to split-viewer for better UX
+        splitViewer.scrollIntoView({behavior: "smooth", block: "center"});
     }
 
     // Hide split viewer and maximize text
     function hideSplitViewer() {
         document.getElementById("split-viewer").classList.add("hidden");
     }
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById("close-pdf-btn").onclick = hideSplitViewer;
-    });
+
+    // Bind close button ONCE after DOM loaded
+    document.getElementById("close-pdf-btn").onclick = hideSplitViewer;
+
 
     function initializeChatHistory() {
         const chatHistoryContainer = document.getElementById('chatHistory');
@@ -258,6 +263,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     analyzeBtnPanel.addEventListener('click', async () => {
+        // Always hide split-viewer when new analysis is triggered
+        hideSplitViewer();
         if (panelSelectedFiles.length === 0) {
             showToast('Please select at least one PDF.');
             return;
