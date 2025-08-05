@@ -6,6 +6,51 @@ document.addEventListener('DOMContentLoaded', function() {
     let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
     let currentChatId = null;
     let currentMessages = [];
+    let adobeDCView = null;
+    let currentPDFUrl = null;
+
+    function loadPDFInViewer(pdfUrl, pageNumber = 1) {
+        if (!window.AdobeDC) {
+            setTimeout(() => loadPDFInViewer(pdfUrl, pageNumber), 500);
+            return;
+        }
+        if (!adobeDCView || currentPDFUrl !== pdfUrl) {
+            document.getElementById("pdf-viewer").innerHTML = "";
+            adobeDCView = new window.AdobeDC.View({
+                clientId: "f21a91a542b840b09da034ae83eb9cb4", // <-- Replace with your Adobe PDF Embed API Client ID
+                divId: "pdf-viewer"
+            });
+            currentPDFUrl = pdfUrl;
+        }
+        adobeDCView.previewFile({
+            content: { location: { url: pdfUrl } },
+            metaData: { fileName: pdfUrl.split('/').pop() }
+        }, {
+            embedMode: "SIZED_CONTAINER",
+            defaultViewMode: "FIT_PAGE",
+            showAnnotationTools: false,
+            showDownloadPDF: false,
+            showPrintPDF: false
+        }).then(function() {
+            adobeDCView.getAPIs().then(function(apis) {
+                apis.gotoLocation({ page: pageNumber });
+            });
+        });
+    }
+
+    function showSplitViewer(refinedText, pdfUrl, pageNumber) {
+        document.getElementById("split-viewer").classList.remove("hidden");
+        document.getElementById("refined-text-panel").textContent = refinedText || "No content available.";
+        loadPDFInViewer(pdfUrl, pageNumber);
+    }
+
+    // Hide split viewer and maximize text
+    function hideSplitViewer() {
+        document.getElementById("split-viewer").classList.add("hidden");
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById("close-pdf-btn").onclick = hideSplitViewer;
+    });
 
     function initializeChatHistory() {
         const chatHistoryContainer = document.getElementById('chatHistory');
@@ -271,8 +316,104 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    function getPDFUrlForDocument(docName) {
+        // Example: If you serve PDFs from /pdfs/ on your server:
+        return `/pdfs/${encodeURIComponent(docName)}`;
+    }
+
     function displayAnalysisResult(result) {
-        const formatted = `<pre style="margin-bottom:0">${JSON.stringify(result, null, 2)}</pre>`;
-        addMessageToUI(formatted, false);
+        const container = document.createElement('div');
+        container.id = 'analysis-output';
+    
+        const subsectionAnalysis = result.subsection_analysis || [];
+        const extractedSections = result.extracted_sections || [];
+    
+        // 🧠 Title for Subsection Analysis
+        const title = document.createElement('h3');
+        title.textContent = `🧠 Subsection Analysis`;
+        container.appendChild(title);
+    
+        // Filter entries that have meaningful refined_text
+        const filteredSubsections = subsectionAnalysis.filter(
+            entry => entry.refined_text && entry.refined_text.trim().length > 10
+        );
+    
+        if (filteredSubsections.length === 0) {
+            const emptyMsg = document.createElement('p');
+            emptyMsg.textContent = 'No analysis results available.';
+            emptyMsg.style.color = '#ccc';
+            container.appendChild(emptyMsg);
+        }
+    
+        // 📘 Display each filtered analysis block
+        filteredSubsections.forEach(entry => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'analysis-card';
+            sectionDiv.style.marginBottom = '1em';
+            sectionDiv.style.padding = '10px';
+            sectionDiv.style.border = '1px solid #ccc';
+            sectionDiv.style.borderRadius = '8px';
+            sectionDiv.style.backgroundColor = '#0e0c0cff';
+    
+            const docTitle = document.createElement('strong');
+            docTitle.textContent = `📘 ${entry.document} (Page ${entry.page_number})`;
+            sectionDiv.appendChild(docTitle);
+    
+            // Hybrid splitting logic: bullet symbols OR sentence-based
+            const points = (entry.refined_text || "")
+                .split(/[\u2022•\-–]\s+|(?<=\.)\s+/)  // Split by bullets or after periods
+                .map(s => s.trim())
+                .filter(p => p.length > 0);
+    
+            const ul = document.createElement('ul');
+            points.forEach(pt => {
+                const li = document.createElement('li');
+                li.textContent = pt.endsWith('.') ? pt : pt + '.'; // Ensure sentence ends with .
+                ul.appendChild(li);
+            });
+    
+            sectionDiv.appendChild(ul);
+            // Make the card clickable to open split viewer
+            sectionDiv.style.cursor = "pointer";
+            sectionDiv.onclick = () => {
+                const pdfUrl = getPDFUrlForDocument(entry.document);
+                showSplitViewer(entry.refined_text, pdfUrl, entry.page_number);
+            };
+            container.appendChild(sectionDiv);
+        });
+    
+        // ➕ Add extracted_sections as reference cards
+        if (extractedSections.length > 0) {
+            const suggestionHeader = document.createElement('h4');
+            suggestionHeader.style.marginTop = '20px';
+            suggestionHeader.textContent = '📎 You can also refer to these particular sections for more information:';
+            container.appendChild(suggestionHeader);
+    
+            extractedSections.forEach(section => {
+                const sectionRef = document.createElement('div');
+                sectionRef.style.margin = '8px 0';
+                sectionRef.style.padding = '8px';
+                sectionRef.style.backgroundColor = '#0e0c0cff';
+                sectionRef.style.borderLeft = '4px solid #3b82f6';
+                sectionRef.style.borderRadius = '4px';
+    
+                const lines = [
+                    `📄 PDF: ${section.document}`,
+                    `📑 Subsection Title: ${section.section_title}`,
+                    `📄 Page No: ${section.page_number}`
+                ];
+    
+                lines.forEach(line => {
+                    const p = document.createElement('p');
+                    p.style.margin = '2px 0';
+                    p.textContent = line;
+                    sectionRef.appendChild(p);
+                });
+    
+                container.appendChild(sectionRef);
+            });
+        }
+    
+        addMessageToUI(container.outerHTML, false);
     }
 });
