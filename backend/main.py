@@ -9,15 +9,9 @@ import sys
 import traceback
 import json
 import os
-from fastapi.staticfiles import StaticFiles
 
 # ---------------------- Setup ----------------------
 app = FastAPI()
-# Ensure the upload directory exists
-os.makedirs(str(BASE_DIR / "input"), exist_ok=True)
-
-# Serve uploaded PDFs as static files at /pdfs
-app.mount("/pdfs", StaticFiles(directory=str(BASE_DIR / "input")), name="pdfs")
 
 app.add_middleware(
     CORSMiddleware,
