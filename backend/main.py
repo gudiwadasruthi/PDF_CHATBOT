@@ -30,6 +30,9 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 logging.basicConfig(level=logging.INFO)
 
+from fastapi.staticfiles import StaticFiles
+app.mount("/pdfs", StaticFiles(directory=UPLOAD_DIR), name="pdfs")
+
 # ---------------------- Routes ----------------------
 
 @app.post("/upload/")
