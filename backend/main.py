@@ -35,10 +35,13 @@ app.mount("/pdfs", StaticFiles(directory=UPLOAD_DIR), name="pdfs")
 
 # ---------------------- Routes ----------------------
 
+from fastapi import Request
+
 @app.post("/upload/")
 async def upload_files(
     pdfs: List[UploadFile] = File(...),
-    input_json: UploadFile = File(...)
+    input_json: UploadFile = File(...),
+    request: Request
 ):
     try:
         # Debug: Entry point
@@ -134,19 +137,8 @@ async def upload_files(
                             entry['pdf_url'] = make_pdf_url(entry['document'], request)
                 return data
             
-            # Try to get request object
-            import inspect
-            frame = inspect.currentframe()
-            request = None
-            while frame:
-                if 'request' in frame.f_locals:
-                    request = frame.f_locals['request']
-                    break
-                frame = frame.f_back
-            if request:
-                output_data = patch_urls(output_data, request)
-            else:
-                logging.warning("[WARNING] Could not patch PDF URLs: no request object found")
+            # Patch URLs using FastAPI request object
+            output_data = patch_urls(output_data, request)
             return output_data
         else:
             logging.warning(f"[WARNING] Output file not found: {output_json_path}")
