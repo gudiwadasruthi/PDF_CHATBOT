@@ -9,45 +9,43 @@ document.addEventListener('DOMContentLoaded', function() {
     let adobeDCView = null;
     let currentPDFUrl = null;
 
-    function loadPDFInViewer(pdfUrl, pageNumber = 1) {
-        if (!window.AdobeDC) {
-            setTimeout(() => loadPDFInViewer(pdfUrl, pageNumber), 500);
-            return;
-        }
-        if (!adobeDCView || currentPDFUrl !== pdfUrl) {
-            document.getElementById("pdf-viewer").innerHTML = "";
-            adobeDCView = new window.AdobeDC.View({
-                clientId: "f21a91a542b840b09da034ae83eb9cb4", // <-- Replace with your Adobe PDF Embed API Client ID
-                divId: "pdf-viewer"
-            });
-            currentPDFUrl = pdfUrl;
-        }
-        adobeDCView.previewFile({
-            content: { location: { url: pdfUrl } },
-            metaData: { fileName: pdfUrl.split('/').pop() }
-        }, {
-            embedMode: "SIZED_CONTAINER",
-            defaultViewMode: "FIT_PAGE",
-            showAnnotationTools: false,
-            showDownloadPDF: false,
-            showPrintPDF: false
-        }).then(function() {
-            adobeDCView.getAPIs().then(function(apis) {
-                apis.gotoLocation({ page: pageNumber });
-            });
-        });
+    function loadPDFInViewer(pdfUrl) {
+    const iframe = document.getElementById("pdf-viewer");
+    if (iframe) {
+        iframe.src = pdfUrl;
     }
+}
 
     // Show the split viewer with PDF and refined text
     function showSplitViewer(refinedText, pdfUrl, pageNumber) {
         const splitViewer = document.getElementById("split-viewer");
         splitViewer.classList.remove("hidden");
-        document.getElementById("refined-text-panel").textContent = refinedText || "No content available.";
+    
+        // Clear and insert refinedText as <ul><li>...</li></ul>
+        const refinedPanel = document.getElementById("refined-text-panel");
+        refinedPanel.innerHTML = ""; // Clear old content
+    
+        const ul = document.createElement("ul");
+        const points = (refinedText || "")
+            .split(/[\u2022•\-–]\s+|(?<=\.)\s+/)
+            .map(s => s.trim())
+            .filter(p => p.length > 0);
+    
+        points.forEach(pt => {
+            const li = document.createElement("li");
+            li.textContent = pt.endsWith('.') ? pt : pt + '.';
+            ul.appendChild(li);
+        });
+    
+        refinedPanel.appendChild(ul);
+    
+        // Load PDF
         loadPDFInViewer(pdfUrl, pageNumber);
-        // Optionally scroll to split-viewer for better UX
+    
+        // Scroll into view
         splitViewer.scrollIntoView({behavior: "smooth", block: "center"});
     }
-
+    
     // Hide split viewer and maximize text
     function hideSplitViewer() {
         document.getElementById("split-viewer").classList.add("hidden");
@@ -323,10 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function getPDFUrlForDocument(docName) {
-        // Example: If you serve PDFs from /pdfs/ on your server:
-        return `/pdfs/${encodeURIComponent(docName)}`;
-    }
 
     function displayAnalysisResult(result) {
         const container = document.createElement('div');
