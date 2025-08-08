@@ -39,9 +39,9 @@ from fastapi import Request
 
 @app.post("/upload/")
 async def upload_files(
+    request: Request,
     pdfs: List[UploadFile] = File(...),
-    input_json: UploadFile = File(...),
-    request: Request
+    input_json: UploadFile = File(...)
 ):
     try:
         # Debug: Entry point
