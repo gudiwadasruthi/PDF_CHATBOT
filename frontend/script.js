@@ -379,11 +379,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
             sectionDiv.appendChild(ul);
             // Make the card clickable to open split viewer
-            sectionDiv.style.cursor = "pointer";
             sectionDiv.onclick = () => {
                 const pdfUrl = entry.pdf_url || getPDFUrlForDocument(entry.document);
+            
+                // 1. Log in browser console
+                console.log("📄 Opening PDF:", pdfUrl);
+            
+                // 2. Show in chat as a clickable message
+                const linkMessage = `<a href="${pdfUrl}" target="_blank" style="color:#5ad1e6;text-decoration:underline;">📄 Open PDF: ${entry.document}</a>`;
+                addMessageToUI(linkMessage, false, false);
+            
+                // 3. Show split viewer
                 showSplitViewer(entry.refined_text, pdfUrl, entry.page_number);
-            };
+            };            
             container.appendChild(sectionDiv);
         });
     
