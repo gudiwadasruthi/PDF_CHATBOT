@@ -1,62 +1,143 @@
-# PDF Analysis Backend
+# PDF Chatbot: Upload, Analyze & Chat with PDFs
 
-## Approach Explanation: A Multi-Stage, Semantics-Driven Analysis Engine
+A modern, full-stack web app to upload PDFs, analyze them with AI, and chat with your documents. No in-page PDF viewing—just clean, fast, and interactive analysis.
 
-Our solution for the "Connecting the Dots" challenge is designed to function as an intelligent document analyst, moving beyond simple text extraction to deliver true contextual relevance. The core of our approach is a sophisticated, modular pipeline that first understands the user's intent on a deep level and then uses that understanding to find, rank, and present the most useful information from a collection of documents.
+---
 
-### Key Components:
+## Features
 
-1. **NLP-Powered Query Expansion**
-   - Uses NLTK and WordNet for dynamic query expansion
-   - Enriches queries with relevant synonyms and semantically related terms
-   - Ensures comprehensive, context-aware search
+### 🚀 Frontend (Web UI)
+- **Modern, Responsive UI**: Built with vanilla JavaScript and Bootstrap 5 for a clean, mobile-friendly experience.
+- **PDF Upload Panel**: Floating 📄 button opens a drag-and-drop panel for uploading one or more PDFs.
+- **Persona & Job Input**: Users can specify a "persona" (role/context) and "job to be done" (task/query) for more relevant analysis.
+- **Analysis Cards**: Results are displayed as clickable cards, each summarizing a section or finding from your PDF(s).
+- **Chat Interface**: Natural chat window for conversation with the AI, including:
+  - Chat message bubbles (user & bot)
+  - Sidebar with chat history and new chat button
+  - LocalStorage-powered persistent chat history
+  - Toast notifications for feedback and errors
+- **Clickable PDF Links**: Analysis results in chat include links that open the PDF externally (never embedded, for security and compatibility).
+- **Progress Bar & Status**: Visual feedback during upload/analysis, including progress bar and status messages.
+- **File List Management**: Remove individual PDFs before analysis, see file names and icons.
+- **Accessibility**: Keyboard navigation, clear focus states, and responsive design.
+- **Error Handling**: User-friendly error messages for missing fields, backend/API errors, and upload problems.
+- **No In-Page PDF Viewer**: All PDF viewer/split-viewer code removed for a simpler, more robust UI.
 
-2. **Deep Semantic Analysis**
-   - Powered by intfloat/e5-base-v2 sentence-embedding model
-   - Converts queries and document content into "meaning vectors"
-   - Runs efficiently offline on CPU
+### 🧠 Backend (AI/Analysis)
+- **FastAPI Server**: Python backend for handling PDF uploads and analysis requests.
+- **Semantic Analysis**: Uses NLP models (e.g., sentence embeddings) to extract, summarize, and rank sections of PDFs based on user query/context.
+- **Multi-File Support**: Analyze multiple PDFs in a single request.
+- **Customizable Analysis**: Accepts persona and job/task to tailor the analysis output.
+- **Structured Results**: Returns analysis as structured JSON for easy frontend rendering.
+- **Docker Support**: Fully containerized for easy deployment anywhere (local or cloud).
+- **CORS Enabled**: Ready for local frontend-backend development.
+- **Robust Error Handling**: Graceful handling of invalid files, missing fields, and server errors.
 
-3. **Multi-Factor Ranking**
-   - "Best Sections" list (50% title + 50% content relevance)
-   - "Best Content" list (content-only relevance)
-   - Mimics human expert evaluation
+### 🛠️ Dev & Ops
+- **Easy Local Development**: Run backend with Uvicorn, frontend with any static server (Live Server, Python http.server, etc.)
+- **Quick Docker Start**: One-command build/run for backend; frontend is static and portable.
+- **Configurable API Endpoint**: Change backend URL in `frontend/script.js` if needed.
+- **Minimal Dependencies**: No heavy frameworks on frontend; backend uses FastAPI and standard NLP libraries.
 
-## Docker Setup and Execution
+### 🔒 Security & Privacy
+- **No PDF Embedding**: Avoids CORS and privacy issues by never embedding PDFs in-page.
+- **File Handling**: Files processed in-memory or securely stored as needed.
+- **Frontend-Only Storage**: Chat history and state are local to the browser.
 
-### Prerequisites
-- Docker Desktop installed and running
-- Input directory containing:
-  - PDF documents
-  - challenge1b_input.json
-- Empty output directory for results
+---
 
-### Build the Docker Image
-```bash
-docker build --platform linux/amd64 -t adobe-hackathon-solution .
+---
+
+## Quick Start (Docker)
+
+1. **Clone the repo:**
+   ```bash
+   git clone <your-repo-url>
+   cd PDF_CHATBOT
+   ```
+2. **Build the backend Docker image:**
+   ```bash
+   docker build -t pdf-chatbot-backend ./backend
+   ```
+3. **Run the backend:**
+   ```bash
+   docker run -p 8000:8000 pdf-chatbot-backend
+   ```
+4. **Serve the frontend:**
+   - Use VSCode Live Server, Python `http.server`, or any static server:
+     ```bash
+     cd frontend
+     python -m http.server 8080
+     # or use Live Server extension in VSCode
+     ```
+   - Open [http://localhost:8080](http://localhost:8080)
+
+---
+
+## Local Development
+
+### Backend
+- Python 3.9+
+- Install dependencies:
+  ```bash
+  cd backend
+  pip install -r requirements.txt
+  uvicorn main:app --reload
+  ```
+- API runs at `http://localhost:8000`
+
+### Frontend
+- All static files in `frontend/`
+- Edit `frontend/script.js` to point to your backend URL if needed
+- Open `frontend/index.html` in a browser or use a static server
+
+---
+
+## Usage
+1. Click the floating 📄 button to open the PDF upload panel
+2. Drag & drop or select PDF(s)
+3. Enter a persona (e.g., "Travel Planner") and job/task (e.g., "Plan a 4-day trip")
+4. Click Analyze
+5. View results as chat messages and clickable analysis cards
+6. Click links to open PDFs in a new tab
+
+---
+
+## Project Structure
+```
+PDF_CHATBOT/
+├── backend/
+│   ├── main.py          # FastAPI server
+│   ├── requirements.txt
+│   └── ...
+├── frontend/
+│   ├── index.html
+│   ├── script.js
+│   ├── style.css
+│   └── ...
+├── README.md
+└── ...
 ```
 
-### Run the Solution
+---
 
-**macOS/Linux (Terminal):**
-```bash
-docker run --rm \
-  -v "$(pwd)/input:/app/input:ro" \
-  -v "$(pwd)/output:/app/output" \
-  --network none \
-  adobe-hackathon-solution
-```
+## Customization & Notes
+- No PDF viewer or split-viewer code: all PDF links open externally
+- Uses localStorage for chat history
+- Backend endpoint is `/upload/` for PDF analysis
+- Frontend uses Bootstrap 5 and vanilla JavaScript
 
-**Windows (PowerShell):**
-```powershell
-docker run --rm `
-  -v "${pwd}\input:/app/input:ro" `
-  -v "${pwd}\output:/app/output" `
-  adobe-hackathon-solution
-```
+---
 
-**Windows (Command Prompt):**
-```cmd
-# PDF Analysis Backend
+## Troubleshooting
+- If Analyze button is disabled: select at least one PDF and fill both persona & job fields
+- If analysis fails: check backend logs, CORS, or API URL in `script.js`
+- For Docker issues: ensure ports are mapped and backend is running
+
+---
+
+## License
+MIT
 
 A robust, containerized FastAPI backend for PDF extraction and semantic analysis. Upload PDFs, trigger semantic analysis, and retrieve results via API. Designed for easy deployment on Render.com or any Docker-compatible cloud service.
 
