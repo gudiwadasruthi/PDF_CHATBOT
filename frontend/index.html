@@ -20,14 +20,12 @@
             <h2 class="sidebar-title">Chat History</h2>
             <p class="sidebar-subtitle">Previous conversations</p>
         </div>
-
         <div class="sidebar-section">
             <button class="new-chat-btn" id="newChatBtn">
                 <span>+</span>
                 <span>New Chat</span>
             </button>
         </div>
-
         <div class="sidebar-section">
             <h3 class="section-title">History</h3>
             <div class="chat-history" id="chatHistory">
@@ -55,19 +53,15 @@
                 </div>
             </div>
         </div>
-        <div id="split-viewer" class="hidden">
-            <div id="refined-text-panel"></div>
-            <div id="pdf-panel">
-              <button id="close-pdf-btn" title="Close PDF" style="float:right;">✖</button>
-              <iframe id="pdf-viewer" style="width:100%;height:100%;border:none;background:#222;" allowfullscreen></iframe>
-            </div>
-          </div>
+        <!-- Analysis row (no PDF viewer) -->
+        <div id="analysis-row" style="display:none; width:100%; height:60vh; flex-direction:row;">
+            <div id="analysis-output" style="flex:1; overflow-y:auto;"></div>
+        </div>
         <div class="typing-indicator" id="typingIndicator">
             <span></span>
             <span></span>
             <span></span>
         </div>
-
         <div class="chat-input-container">
             <div class="chat-input-wrapper">
                 <textarea 
@@ -78,16 +72,12 @@
                     rows="1"
                 ></textarea>
             </div>
-            <button class="send-btn" id="sendBtn">
-                →
-            </button>
+            <button class="send-btn" id="sendBtn">→</button>
         </div>
     </main>
 
     <!-- PDF Selector Button -->
-    <button class="pdf-selector" id="pdfSelector">
-        📄
-    </button>
+    <button class="pdf-selector" id="pdfSelector">📄</button>
 
     <!-- PDF Converter Panel -->
     <div class="pdf-panel" id="pdfPanel">
@@ -98,7 +88,6 @@
             </h3>
             <button class="close-panel" id="closePanel">×</button>
         </div>
-
         <div class="drop-zone" id="dropZonePanel">
             <div class="drop-zone-content">
                 <span class="drop-zone-icon">📁</span>
@@ -106,9 +95,7 @@
                 <p class="drop-zone-hint">or click to browse</p>
             </div>
         </div>
-
         <input type="file" id="fileInputPanel" class="file-input" accept=".pdf" multiple>
-
         <!-- Persona and Job Inputs -->
         <div style="margin: 1.5rem 0;">
             <label for="personaInput" style="display:block; margin-bottom:0.5rem; font-weight:600;">Persona (Role):</label>
@@ -116,17 +103,13 @@
             <label for="jobInput" style="display:block; margin-bottom:0.5rem; font-weight:600;">Job to be Done (Task):</label>
             <textarea id="jobInput" rows="2" placeholder="e.g. Plan a trip of 4 days for a group of 10 college friends." style="width:100%; padding:0.75rem; border-radius:8px; border:1px solid #8DB1A4;"></textarea>
         </div>
-        <button class="convert-btn" id="analyzeBtnPanel" style="margin-top:1rem; background: var(--gradient-accent);">
-            Analyze
-        </button>
-
+        <button class="convert-btn" id="analyzeBtnPanel" style="margin-top:1rem; background: var(--gradient-accent);">Analyze</button>
         <div class="progress-container" id="progressContainerPanel">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFillPanel"></div>
             </div>
             <p class="progress-text" id="progressTextPanel">0%</p>
         </div>
-
         <div class="file-list" id="fileListPanel">
             <div id="fileItemsPanel"></div>
         </div>

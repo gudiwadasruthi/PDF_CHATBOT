@@ -9,55 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let adobeDCView = null;
     let currentPDFUrl = null;
 
-    function loadPDFInViewer(pdfUrl, pageNumber) {
-    const iframe = document.getElementById("pdf-viewer");
-    if (iframe) {
-        let url = pdfUrl;
-        if (pageNumber && Number.isInteger(pageNumber) && pageNumber > 0) {
-            url += `#page=${pageNumber}`;
-        }
-        iframe.src = url;
-    }
-}
-
-    // Show the split viewer with PDF and refined text
-    function showSplitViewer(refinedText, pdfUrl, pageNumber) {
-        const splitViewer = document.getElementById("split-viewer");
-        splitViewer.classList.remove("hidden");
-    
-        // Clear and insert refinedText as <ul><li>...</li></ul>
-        const refinedPanel = document.getElementById("refined-text-panel");
-        refinedPanel.innerHTML = ""; // Clear old content
-    
-        const ul = document.createElement("ul");
-        const points = (refinedText || "")
-            .split(/[\u2022•\-–]\s+|(?<=\.)\s+/)
-            .map(s => s.trim())
-            .filter(p => p.length > 0);
-    
-        points.forEach(pt => {
-            const li = document.createElement("li");
-            li.textContent = pt.endsWith('.') ? pt : pt + '.';
-            ul.appendChild(li);
-        });
-    
-        refinedPanel.appendChild(ul);
-    
-        // Load PDF
-        loadPDFInViewer(pdfUrl, pageNumber);
-    
-        // Scroll into view
-        splitViewer.scrollIntoView({behavior: "smooth", block: "center"});
-    }
-    
-    // Hide split viewer and maximize text
-    function hideSplitViewer() {
-        document.getElementById("split-viewer").classList.add("hidden");
-    }
-
-    // Bind close button ONCE after DOM loaded
-    document.getElementById("close-pdf-btn").onclick = hideSplitViewer;
-
 
     function initializeChatHistory() {
         const chatHistoryContainer = document.getElementById('chatHistory');
@@ -265,8 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     analyzeBtnPanel.addEventListener('click', async () => {
-        // Always hide split-viewer when new analysis is triggered
-        hideSplitViewer();
+
         if (panelSelectedFiles.length === 0) {
             showToast('Please select at least one PDF.');
             return;
@@ -378,20 +328,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     
             sectionDiv.appendChild(ul);
-            // Make the card clickable to open split viewer
+            // Make the card clickable: just log and show link in chat
             sectionDiv.onclick = () => {
                 const pdfUrl = entry.pdf_url || getPDFUrlForDocument(entry.document);
-            
-                // 1. Log in browser console
                 console.log("📄 Opening PDF:", pdfUrl);
-            
-                // 2. Show in chat as a clickable message
                 const linkMessage = `<a href="${pdfUrl}" target="_blank" style="color:#5ad1e6;text-decoration:underline;">📄 Open PDF: ${entry.document}</a>`;
                 addMessageToUI(linkMessage, false, false);
-            
-                // 3. Show split viewer
-                showSplitViewer(entry.refined_text, pdfUrl, entry.page_number);
-            };            
+            }
             container.appendChild(sectionDiv);
         });
     
