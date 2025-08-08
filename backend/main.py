@@ -108,8 +108,46 @@ async def upload_files(
         logging.info(f"[DEBUG] Checking for output file: {output_json_path}")
         if output_json_path.exists():
             logging.info(f"[DEBUG] Output file found. Returning contents.")
+            from fastapi import Request
+            import urllib.parse
+            
+            # Read output and add PDF URLs
             with open(output_json_path) as f:
-                return json.load(f)
+                output_data = json.load(f)
+            
+            # Construct base URL from request (if available)
+            def make_pdf_url(filename, request):
+                base_url = str(request.base_url).rstrip('/')
+                url = f"{base_url}/pdfs/{urllib.parse.quote(filename)}"
+                logging.info(f"[DEBUG] Constructed PDF URL: {url}")
+                return url
+            
+            # Patch URLs into output
+            def patch_urls(data, request):
+                if 'subsection_analysis' in data:
+                    for entry in data['subsection_analysis']:
+                        if 'document' in entry:
+                            entry['pdf_url'] = make_pdf_url(entry['document'], request)
+                if 'extracted_sections' in data:
+                    for entry in data['extracted_sections']:
+                        if 'document' in entry:
+                            entry['pdf_url'] = make_pdf_url(entry['document'], request)
+                return data
+            
+            # Try to get request object
+            import inspect
+            frame = inspect.currentframe()
+            request = None
+            while frame:
+                if 'request' in frame.f_locals:
+                    request = frame.f_locals['request']
+                    break
+                frame = frame.f_back
+            if request:
+                output_data = patch_urls(output_data, request)
+            else:
+                logging.warning("[WARNING] Could not patch PDF URLs: no request object found")
+            return output_data
         else:
             logging.warning(f"[WARNING] Output file not found: {output_json_path}")
             return {"status": "done", "message": "Analysis complete, but no output file found."}
