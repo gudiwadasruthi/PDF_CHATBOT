@@ -9,10 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let adobeDCView = null;
     let currentPDFUrl = null;
 
-    function loadPDFInViewer(pdfUrl) {
+    function loadPDFInViewer(pdfUrl, pageNumber) {
     const iframe = document.getElementById("pdf-viewer");
     if (iframe) {
-        iframe.src = pdfUrl;
+        let url = pdfUrl;
+        if (pageNumber && Number.isInteger(pageNumber) && pageNumber > 0) {
+            url += `#page=${pageNumber}`;
+        }
+        iframe.src = url;
     }
 }
 
