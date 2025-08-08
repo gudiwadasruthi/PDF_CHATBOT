@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Make the card clickable to open split viewer
             sectionDiv.style.cursor = "pointer";
             sectionDiv.onclick = () => {
-                const pdfUrl = getPDFUrlForDocument(entry.document);
+                const pdfUrl = entry.pdf_url || getPDFUrlForDocument(entry.document);
                 showSplitViewer(entry.refined_text, pdfUrl, entry.page_number);
             };
             container.appendChild(sectionDiv);
