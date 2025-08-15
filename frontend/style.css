@@ -1,222 +1,307 @@
 /* Custom styles extracted from index.html */
+
 body {
-  background: var(--bg-base);
-  color: var(--text-primary);
+    background: var(--bg-base);
+    color: var(--text-primary);
 }
-.go { /* glass outer */
-  background: var(--outer-bg);
-  backdrop-filter: blur(var(--outer-blur));
-  -webkit-backdrop-filter: blur(var(--outer-blur));
-  border: 2px solid var(--outer-border);
-  box-shadow: var(--outer-shadow);
-  border-radius: 0.5rem;
+
+.go {
+    /* glass outer */
+    background: var(--outer-bg);
+    backdrop-filter: blur(var(--outer-blur));
+    -webkit-backdrop-filter: blur(var(--outer-blur));
+    border: 2px solid var(--outer-border);
+    box-shadow: var(--outer-shadow);
+    border-radius: 0.5rem;
 }
-.gi { /* glass inner */
-  background: var(--panel-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 2px solid var(--panel-border);
-  box-shadow: var(--panel-shadow);
-  border-radius: var(--panel-radius);
-  color: var(--panel-text);
+
+.gi {
+    /* glass inner */
+    background: var(--panel-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid var(--panel-border);
+    box-shadow: var(--panel-shadow);
+    border-radius: var(--panel-radius);
+    color: var(--panel-text);
 }
+
 .gi button,
 .gi input {
-  border-color: var(--button-border);
-  background: var(--button-bg);
-  color: var(--button-text);
-  font-weight: 1000;
+    border-color: var(--button-border);
+    background: var(--button-bg);
+    color: var(--button-text);
+    font-weight: 1000;
 }
+
 .gi button i,
 .gi button svg {
-  color: inherit;            /* FontAwesome <i> */
-  fill: currentColor;        /* SVG fill */
-  stroke: currentColor;      /* SVG stroke */
+    color: inherit; /* FontAwesome <i> */
+    fill: currentColor; /* SVG fill */
+    stroke: currentColor; /* SVG stroke */
 }
-.gi button:hover { background: var(--button-hover-bg); }
-.gi input::placeholder { color: var(--button-text); opacity: .8; }
-.hidden { display: none; }
+
+.gi button:hover {
+    background: var(--button-hover-bg);
+}
+
+.gi input::placeholder {
+    color: var(--button-text);
+    opacity: 0.8;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Pulse effect for button blocks */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pulse-hover:hover {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Brighten helper text under buttons on hover */
+.pulse-hover:hover .opacity-95 {
+    opacity: 1;
+}
+
+.pulse-hover .opacity-95 {
+    transition: opacity 200ms ease;
+}
+
+/* Hover shine effect for primary action buttons */
+.main-action-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.main-action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.main-action-btn:hover::before {
+    left: 100%;
+}
+
+/* Results section */
 #results {
-  white-space: pre-wrap;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  max-height: none; /* remove height limit */
-  overflow: visible; /* allow it to grow */
-  color: var(--results-text, var(--text-primary, #ffffff));
+    white-space: pre-wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    max-height: none;
+    overflow: visible;
+    color: var(--results-text, var(--text-primary, #ffffff));
 }
+
 #results .summary-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: var(--card-shadow);
-  margin-bottom: 0; /* spacing handled by gap in strip */
-  color: var(--card-text); /* ensure readable text on cards */
-  /* Horizontal strip behavior */
-  flex: 0 0 100%; /* take full viewport width */
-  width: 100%;
-  scroll-snap-align: start;
-}
-#results .summary-card .gradient-text {
-  color: var(--grad-fallback, currentColor); /* theme-driven fallback */
-}
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  #results .summary-card .gradient-text {
-    background: linear-gradient(to right, var(--grad-1) 0%, var(--grad-2) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
-}
-
-/* Generic lists in results (ensures bullets/numbers are visible across themes) */
-#results ul,
-#results ol {
-  list-style-position: outside;
-  padding-left: 1.25rem;
-  margin: 0.5rem 0;
-}
-#results ul { list-style-type: disc; }
-#results ol { list-style-type: decimal; }
-#results ul ul { list-style-type: circle; }
-#results ol ol { list-style-type: lower-alpha; }
-#results li { margin: 0.25rem 0; }
-#results li::marker { color: var(--results-text, var(--text-primary, #ffffff)); }
-
-.summary-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: var(--card-shadow);
-  margin-bottom: 1.5rem;
-  color: var(--card-text); /* ensure readable text on cards */
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 1.5rem;
+    color: var(--card-text);
 }
 
 .gradient-text {
-  /* Fallback for browsers without background-clip:text */
-  color: var(--grad-fallback, currentColor);
-}
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .gradient-text {
-    background: linear-gradient(to right, var(--grad-1) 0%, var(--grad-2) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
+    color: var(--grad-fallback, currentColor);
 }
 
-/* Ensure gradient text inside cards wins over the default card text color */
-#results .summary-card .gradient-text { color: var(--grad-fallback, currentColor); }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  #results .summary-card .gradient-text {
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
+    .gradient-text {
+        background: linear-gradient(to right, var(--grad-1) 0%, var(--grad-2) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+    }
 }
 
 /* Horizontal strip for document summary cards */
 .summary-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap; /* keep one row */
-  gap: 1rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  margin-top: 0.5rem;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Ensure bullets are visible inside summary cards */
+/* Lists inside cards */
 #results .summary-card ul {
-  list-style: disc;
-  list-style-position: outside;
-  padding-left: 1.25rem;
-  margin: 0.5rem 0;
+    list-style: disc;
+    list-style-position: outside;
+    padding-left: 1.25rem;
+    margin: 0.5rem 0;
 }
+
 #results .summary-card ul ul {
-  list-style: circle;
-  list-style-position: outside;
-  padding-left: 1.25rem;
-  margin: 0.25rem 0;
+    list-style: circle;
+    padding-left: 1.25rem;
+    margin: 0.25rem 0;
 }
+
 #results .summary-card li {
-  margin: 0.25rem 0;
+    margin: 0.25rem 0;
 }
-#results .summary-card li::marker { color: var(--card-text); }
-/* ===== Upload modal: Drag & Drop zone and file list ===== */
+
+#results .summary-card li::marker {
+    color: var(--card-text);
+}
+
+/* Upload modal: Drag & Drop zone and file list */
 .gi .drop-zone {
-  background: var(--card-bg);
-  border: 2px dashed var(--dropzone-border);
-  color: var(--card-text);
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    background: var(--card-bg);
+    border: 2px dashed var(--dropzone-border);
+    color: var(--card-text);
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
-.gi .drop-zone:hover { border-color: var(--dropzone-border); }
+
+.gi .drop-zone:hover {
+    border-color: var(--dropzone-border);
+}
+
 .gi .drop-zone.is-dragover {
-  border-color: var(--grad-1);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  transform: translateY(-1px);
+    border-color: var(--grad-1);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
 }
-.gi .drop-zone .dz-invite { margin-bottom: 0.25rem; }
-.gi .file-list { list-style: disc; padding-left: 1.25rem; margin: 0.25rem 0 0; }
-.gi .file-list li { margin: 0.15rem 0; color: var(--panel-text); }
+
+.gi .drop-zone .dz-invite {
+    margin-bottom: 0.25rem;
+}
+
+.gi .file-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0.25rem 0 0;
+}
+
+.gi .file-list li {
+    margin: 0.15rem 0;
+    color: var(--panel-text);
+}
 
 /* Upload progress bar */
 .gi .progress-track {
-  width: 100%;
-  height: 14px;
-  background: var(--progress-track-bg);
-  border-radius: 9999px;
-  overflow: hidden;
-  border: 1px solid var(--progress-track-border);
+    width: 100%;
+    height: 14px;
+    background: var(--progress-track-bg);
+    border-radius: 9999px;
+    overflow: hidden;
+    border: 1px solid var(--progress-track-border);
 }
+
 .gi .progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
-  transition: width 200ms ease;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--grad-1), var(--grad-2));
+    transition: width 200ms ease;
 }
-.gi .progress-bar.error { background: #dc2626; }
 
-/* Thinking / spinner in results */
+.gi .progress-bar.error {
+    background: #dc2626;
+}
+
+/* Spinner / Thinking */
 #results .thinking {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
 }
-#results .thinking .spinner-ring {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 4px solid rgba(255,255,255,0.25);
-  border-top-color: var(--button-text);
-  animation: spin 1s linear infinite;
-}
-#results .thinking .msg { font-weight: 800; color: var(--button-text); -webkit-text-fill-color: var(--button-text); }
-@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Results card headers and copy buttons */
+#results .thinking .spinner-ring {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.25);
+    border-top-color: var(--button-text);
+    animation: spin 1s linear infinite;
+}
+
+#results .thinking .msg {
+    font-weight: 800;
+    color: var(--button-text);
+    -webkit-text-fill-color: var(--button-text);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Card headers and copy buttons */
 #results .card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
 }
+
 #results .copy-btn {
-  background: var(--copy-btn-bg);
-  border: 1.5px solid var(--copy-btn-border);
-  color: var(--copy-btn-text);
-  border-radius: 9999px;
-  padding: 2px 10px;
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 800;
-  cursor: pointer;
+    background: var(--copy-btn-bg);
+    border: 1.5px solid var(--copy-btn-border);
+    color: var(--copy-btn-text);
+    border-radius: 9999px;
+    padding: 2px 10px;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 800;
+    cursor: pointer;
 }
-#results .copy-btn:hover { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.3); }
-#results .copy-btn.success { background: #16a34a; border-color: #16a34a; color: #fff; }
+
+#results .copy-btn:hover {
+    background: rgba(0,0,0,0.04);
+    border-color: rgba(0,0,0,0.3);
+}
+
+#results .copy-btn.success {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #fff;
+}
+
+/* Theme selector */
+#themeSelect {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: rgba(15,23,42,0.85);
+    color: #ffffff;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    border-radius: 9999px;
+    padding: 6px 34px 6px 12px;
+    font-weight: 800;
+    line-height: 1.25;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    cursor: pointer;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="white"><path d="M5.5 7.5l4.5 5 4.5-5"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px 14px;
+}
+
+#themeSelect:hover {
+    border-color: #ffffff;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+}
+
+#themeSelect:focus {
+    outline: 2px solid rgba(255,255,255,0.85);
+    outline-offset: 2px;
+}
 
 /* ===== Theme System (CSS variables + overrides) ===== */
 /* Variables */
