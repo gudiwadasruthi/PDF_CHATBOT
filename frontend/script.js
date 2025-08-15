@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const API_BASE = 'http://localhost:9000'; // Single base URL (combined app)
+  const API_BASE = 'https://pdf-chatbot-7hnb.onrender.com'; // Single base URL (combined app)
 
   const uBtn = document.getElementById('uBtn');
   const aBtn = document.getElementById('aBtn');
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.createElement('div');
     header.classList.add('card-header');
     const title = document.createElement('h2');
-    title.textContent = '🧠 Subsection Analysis';
+    title.textContent = 'ðŸ§  Subsection Analysis';
     title.style.fontWeight = '800';
     title.classList.add('gradient-text');
     const copyBtn = document.createElement('button');
@@ -276,8 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const score = (typeof entry.score === 'number') ? ` (score: ${entry.score.toFixed(3)})` : '';
 
         // Try to detect structured sub-points in refined text
-        const bulletParts = refined.includes('•') ? refined.split(/•/).map(s => s.trim()).filter(Boolean)
-                           : refined.split(/\r?\n/).map(s => s.replace(/^[-*–]\s*/, '').trim()).filter(Boolean);
+        const bulletParts = refined.includes('â€¢') ? refined.split(/â€¢/).map(s => s.trim()).filter(Boolean)
+                           : refined.split(/\r?\n/).map(s => s.replace(/^[-*â€“]\s*/, '').trim()).filter(Boolean);
 
         if (bulletParts.length > 1) {
           // Heading label for the parent item (first line), rest as nested bullets
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Title for Extracted Sections
     const title2 = document.createElement('h3');
-    title2.textContent = '📌 Top Extracted Sections';
+    title2.textContent = 'ðŸ“Œ Top Extracted Sections';
     title2.style.fontWeight = '800';
     title2.style.marginBottom = '0.5rem';
     title2.classList.add('gradient-text');
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = sec?.section_title || sec?.title || '';
         const span = document.createElement('span');
         span.classList.add('gradient-text');
-        span.textContent = [doc, title].filter(Boolean).join(' — ');
+        span.textContent = [doc, title].filter(Boolean).join(' â€” ');
         li.appendChild(span);
         list2.appendChild(li);
       });
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
     container.id = 'summary-output';
 
     const title = document.createElement('h3');
-    title.textContent = '📝 Quick Summary';
+    title.textContent = 'ðŸ“ Quick Summary';
     title.style.fontWeight = '800';
     title.style.marginBottom = '0.5rem';
     container.appendChild(title);
@@ -425,8 +425,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const sum = (h?.summary || '').trim();
     
 
-          // If the summary contains bullet markers (•), render them as a nested list
-          const parts = sum.split(/•/).map(s => s.trim()).filter(Boolean);
+          // If the summary contains bullet markers (â€¢), render them as a nested list
+          const parts = sum.split(/â€¢/).map(s => s.trim()).filter(Boolean);
           if (parts.length > 1) {
             // Heading label
             const strong = document.createElement('strong');
@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Wrap the combined text in a gradient span so the bullet remains visible
             const span = document.createElement('span');
             span.classList.add('gradient-text');
-            span.textContent = [head, sum].filter(Boolean).join(' — ');
+            span.textContent = [head, sum].filter(Boolean).join(' â€” ');
             li.appendChild(span);
           }
           list.appendChild(li);
@@ -497,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.createElement('div');
     header.className = 'card-header';
     const heading = document.createElement('h3');
-    heading.textContent = '💡 Explanations';
+    heading.textContent = 'ðŸ’¡ Explanations';
     heading.style.fontWeight = '800';
     heading.classList.add('gradient-text');
     const copyBtn = document.createElement('button');
@@ -509,7 +509,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.createElement('div');
     body.className = 'card-content';
 
-    const items = Array.isArray(result) ? result : (Array.isArray(result?.data) ? result.data : []);
+    // If backend returned an error, surface it clearly
+    const backendError = (result && result.error) || (result && result.data && result.data.error);
+    if (backendError) {
+      const errP = document.createElement('p');
+      errP.textContent = `Backend error: ${backendError}`;
+      errP.classList.add('gradient-text');
+      body.appendChild(errP);
+      card.appendChild(body);
+      container.appendChild(card);
+      resultsEl.appendChild(container);
+      return;
+    }
+
+    const items = Array.isArray(result)
+      ? result
+      : (Array.isArray(result?.data) ? result.data
+      : (Array.isArray(result?.explanations) ? result.explanations
+      : (Array.isArray(result?.data?.explanations) ? result.data.explanations : [])));
     if (!items.length) {
       const p = document.createElement('p');
       p.textContent = 'No explanation available.';
@@ -527,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
     list.style.paddingLeft = '1.25rem';
     items.slice(0, 10).forEach(item => {
       const li = document.createElement('li');
-      const title = item?.title || item?.pdf_name || 'Untitled Document';
+      const title = item?.heading || item?.title || item?.pdf_name || 'Section';
       const para = document.createElement('div');
       para.style.marginTop = '0.25rem';
       para.textContent = (item?.explanation || '').trim();
@@ -575,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sBtn?.addEventListener('click', async () => {
     hideModals();
     try {
-      showThinking('Summarizing your PDFs…');
+      showThinking('Summarizing your PDFsâ€¦');
       const resp = await fetch(`${API_BASE}/summary/`);
       if (!resp.ok) throw new Error(`Summary failed ${resp.status}`);
       console.debug('[HTTP] /summary status', resp.status);
@@ -614,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Use XHR to capture upload progress
       if (uploadProgressBar) uploadProgressBar.classList.remove('error');
-      setUploadLabel('Uploading…');
+      setUploadLabel('Uploadingâ€¦');
       setUploadProgress(0);
       let displayPct = 0;
       let creepTimer = null;
@@ -634,7 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Upload finished; hold ~80% while backend processes
             displayPct = Math.max(displayPct, 80);
             setUploadProgress(displayPct);
-            setUploadLabel('Processing…');
+            setUploadLabel('Processingâ€¦');
             if (!creepTimer) {
               creepTimer = setInterval(() => {
                 displayPct = Math.min(95, displayPct + 1);
@@ -684,7 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch(_) {}
       
-      resultsEl.textContent = "✅ You are all set to ask questions!";
+      resultsEl.textContent = "âœ… You are all set to ask questions!";
       resultsEl.style.color = "white"
       // Keep last Stage 1 outputs for Analyze step
       window.lastStage1 = data;
@@ -784,11 +801,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const prev = aOk.textContent;
       aOk.disabled = true;
       aOk.textContent = 'Analyzing...';
-      showThinking('Analyzing your collection…');
+      showThinking('Analyzing your collectionâ€¦');
 
       // Init analyze progress bar
       if (analyzeProgressBar) analyzeProgressBar.classList.remove('error');
-      setAnalyzeLabel('Processing…');
+      setAnalyzeLabel('Processingâ€¦');
       setAnalyzeProgress(0);
       let aDisplayPct = 0;
       aCreepTimer = setInterval(() => {
@@ -836,13 +853,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const q = askInput?.value?.trim();
     if (!q) return;
     try {
-      showThinking('Thinking…');
+      showThinking('Thinkingâ€¦');
       const resp = await fetch(`${API_BASE}/explain/?topic=${encodeURIComponent(q)}`);
       if (!resp.ok) throw new Error(`Explain failed ${resp.status}`);
       console.debug('[HTTP] /explain status', resp.status);
       const data = await resp.json();
       console.debug('[HTTP] /explain JSON keys', Object.keys(data || {}));
-      const payload = data?.data ?? data;
+      let payload = data?.data ?? data;
+      // Fallback: backend may return stdout containing JSON if file write failed
+      if (!Array.isArray(payload) && !payload?.explanations && typeof data?.stdout === 'string') {
+        try {
+          const parsed = JSON.parse(data.stdout);
+          if (parsed && (Array.isArray(parsed) || parsed.explanations)) {
+            payload = parsed;
+            console.debug('[HTTP] /explain parsed stdout payload');
+          }
+        } catch (e) {
+          console.warn('[WARN] Failed to parse stdout JSON from /explain');
+        }
+      }
       resultsEl.innerHTML = '';
       try { displayExplainResult(payload); } catch (err) { console.warn('[WARN] displayExplainResult failed', err); resultsEl.textContent = 'Error displaying explanation.'; }
     } catch (e) {
