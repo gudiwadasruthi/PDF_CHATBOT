@@ -888,3 +888,4 @@ document.addEventListener('DOMContentLoaded', () => {
     askForm?.addEventListener('submit', runExplain);
     // Dock buttons removed
   });
+
