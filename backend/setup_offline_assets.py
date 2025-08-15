@@ -14,15 +14,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
-def setup_directories():
-    """Create necessary directories with proper permissions."""
-    dirs = [
-        "/app/model_cache",
-        "/app/nltk_data",
-        "/app/input",
-        "/app/output"
-=======
 BASE_DIR = os.path.dirname(__file__)
 
 def setup_directories():
@@ -32,7 +23,6 @@ def setup_directories():
         os.path.join(BASE_DIR, "nltk_data"),
         os.path.join(BASE_DIR, "input"),
         os.path.join(BASE_DIR, "output"),
->>>>>>> 4580bc7 (first commit)
     ]
     
     for dir_path in dirs:
@@ -44,41 +34,6 @@ def setup_directories():
             logger.error(f"Failed to create directory {dir_path}: {str(e)}")
             raise
 
-<<<<<<< HEAD
-def download_model():
-    """Download and cache the sentence transformer model."""
-    model_name = 'paraphrase-MiniLM-L3-v2'
-    cache_dir = os.getenv('SENTENCE_TRANSFORMERS_HOME', '/app/model_cache')
-    
-    logger.info(f"Downloading model '{model_name}' to: {cache_dir}")
-    
-    try:
-        # Verify we can write to the cache directory
-        test_file = os.path.join(cache_dir, 'write_test')
-        with open(test_file, 'w') as f:
-            f.write('test')
-        os.remove(test_file)
-        
-        # Download the model
-        model = SentenceTransformer(model_name, cache_folder=cache_dir)
-        # Explicitly save model to absolute path for Docker
-        abs_save_path = "/app/model_cache/paraphrase-MiniLM-L3-v2"
-        model.save(abs_save_path)
-        logger.info(f"Model explicitly saved to {abs_save_path}")
-        # Verify the model files
-        model_files = os.listdir(abs_save_path)
-        if not model_files:
-            raise Exception("No model files found after download/save")
-        logger.info(f"Model downloaded and saved successfully. Found {len(model_files)} files in cache.")
-        return True
-    except Exception as e:
-        logger.error(f"Error downloading model: {str(e)}")
-        return False
-
-def download_nltk_data():
-    """Download required NLTK data."""
-    nltk_data_dir = os.getenv('NLTK_DATA', '/app/nltk_data')
-=======
 def download_models():
     """Download and cache all required models. Returns True on success (both), False otherwise."""
     cache_dir = os.getenv('SENTENCE_TRANSFORMERS_HOME', os.path.join(BASE_DIR, 'model_cache'))
@@ -106,7 +61,6 @@ def download_models():
 def download_nltk_data():
     """Download required NLTK data."""
     nltk_data_dir = os.getenv('NLTK_DATA', os.path.join(BASE_DIR, 'nltk_data'))
->>>>>>> 4580bc7 (first commit)
     nltk.download('wordnet', download_dir=nltk_data_dir)
     nltk.download('averaged_perceptron_tagger', download_dir=nltk_data_dir)
     nltk.download('punkt', download_dir=nltk_data_dir)
@@ -133,15 +87,9 @@ def main():
         setup_directories()
         
         # Download model
-<<<<<<< HEAD
-        if not download_model():
-            logger.error("Model download failed. The application may not work correctly.")
-        
-=======
         if not download_models():
             logger.error("Model download failed. The application may not work correctly.")
 
->>>>>>> 4580bc7 (first commit)
         # Download NLTK data
         download_nltk_data()
         
