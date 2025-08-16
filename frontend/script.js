@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mark frontend ready for quick visual check
     try {
       console.log('[UI] Frontend ready');
-      if (resultsEl) resultsEl.textContent = 'Ready';
+      if (resultsEl) resultsEl.textContent = '👩‍🏫Welcome to ReadWise AI';
     } catch(_) {}
   
     // Pretty renderer for Analyze results
@@ -702,7 +702,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch(_) {}
         
         resultsEl.textContent = "✅ You are all set to ask questions!";
-        resultsEl.style.color = "white"
         // Keep last Stage 1 outputs for Analyze step
         window.lastStage1 = data;
         // Also persist just the filenames to survive shape differences
@@ -888,4 +887,25 @@ document.addEventListener('DOMContentLoaded', () => {
     askForm?.addEventListener('submit', runExplain);
     // Dock buttons removed
   });
+      // Theme Modal handling
+    const tBtn = document.getElementById("tBtn");
+    const tModal = document.getElementById("tModal");
+    const tClose = document.getElementById("tClose");
+    const themeOptions = document.querySelectorAll(".theme-option");
+
+    tBtn.addEventListener("click", () => {
+      tModal.classList.remove("hidden");
+    });
+
+    tClose.addEventListener("click", () => {
+      tModal.classList.add("hidden");
+    });
+
+    themeOptions.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const selectedTheme = btn.dataset.theme;
+        document.documentElement.setAttribute("data-theme", selectedTheme);
+        tModal.classList.add("hidden");
+      });
+    });
 
