@@ -888,62 +888,61 @@ body::before {
     color: rgba(102, 217, 255, 0.9);
 }
 
-@media (max-width: 600px) {
-    .container {
-        padding: 20px 15px;
-    }
-    
-    .action-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .query-section {
-        padding: 30px 20px;
-    }
-    
+/* 📱 Mobile-Friendly Fixes */
+@media (max-width: 768px) {
+    /* Reduce padding in results area */
     .results-area {
-        padding: 40px 20px;
-    }
-    
-    .header {
-        margin-bottom: 40px;
-    }
-
-    .modal-content {
-        padding: 20px;
-    }
-}
-@media (max-width: 600px) {
-    /* Make action cards full width on mobile */
-    .action-grid {
-      grid-template-columns: 1fr;
+      padding: 20px !important;
     }
   
-    .action-card {
-      padding: 20px;
+    /* Adjust big results heading */
+    .results-text {
+      font-size: 1.6rem !important;
+      text-align: center;
     }
   
-    /* Fix Upload/Analyze modal paddings */
-    .drop-zone {
-      padding: 20px;
-      min-height: 120px;
+    /* Stack input field & button vertically */
+    .input-container {
+      flex-direction: column;
+      align-items: stretch;
     }
   
-    .modal-content {
-      width: 95%;
-      padding: 20px;
+    .query-input {
+      width: 100%;
+      margin-bottom: 10px;
     }
   
-    /* Reduce results panel padding for mobile */
-    .results-area {
-      padding: 20px;
+    .submit-btn {
+      width: 100%;
+      height: 45px;
     }
+  }
   
-    /* Adjust summary cards for mobile */
+  @media (max-width: 600px) {
+    /* Make summary cards fit phone screens */
     #summary-output .summary-card {
-      flex: 0 0 90%;   /* each card takes ~90% of screen width */
-      max-width: 90%;
+      flex: 0 0 90% !important;
+      max-width: 90% !important;
+    }
+  
+    /* Smaller text for cards */
+    #results .summary-card {
+      font-size: 0.9rem !important;
+    }
+  
+    /* Adjust main title */
+    .main-title {
+      font-size: 2rem !important;
+    }
+  
+    /* Tweak modal padding for smaller screens */
+    .modal-content {
+      padding: 1rem !important;
+    }
+  
+    /* File list readability */
+    .file-list li {
+      font-size: 0.8rem !important;
     }
   }
   
