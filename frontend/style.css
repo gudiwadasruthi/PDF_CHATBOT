@@ -714,9 +714,12 @@ body::before {
       to   { transform: translateX(-100%); }
     }
   }
-  
-  
-  
+  /* Pause marquee on hover/tap (mobile scrolling only) */
+@media (max-width: 600px) {
+    .subtitle:hover {
+      animation-play-state: paused;
+    }
+  }
   
 /* Lists inside cards */
 #results .summary-card ul {
@@ -911,3 +914,36 @@ body::before {
         padding: 20px;
     }
 }
+@media (max-width: 768px) {
+    /* Make action cards full width on mobile */
+    .action-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .action-card {
+      padding: 20px;
+    }
+  
+    /* Fix Upload/Analyze modal paddings */
+    .drop-zone {
+      padding: 20px;
+      min-height: 120px;
+    }
+  
+    .modal-content {
+      width: 95%;
+      padding: 20px;
+    }
+  
+    /* Reduce results panel padding for mobile */
+    .results-area {
+      padding: 20px;
+    }
+  
+    /* Adjust summary cards for mobile */
+    #summary-output .summary-card {
+      flex: 0 0 90%;   /* each card takes ~90% of screen width */
+      max-width: 90%;
+    }
+  }
+  
