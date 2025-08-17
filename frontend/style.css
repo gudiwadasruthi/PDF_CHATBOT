@@ -201,7 +201,6 @@ body::before {
     50% { background-position: 100% 50%; }
 }
 
-
 /* Input container default */
 .input-container {
     display: flex;
@@ -212,16 +211,15 @@ body::before {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
-  }
-  
-  /* Hover effect for the whole container */
-  .input-container:hover {
+}
+
+/* Hover effect for the whole container */
+.input-container:hover {
     border-color: #4dafff;
     background: rgba(77, 175, 255, 0.08);
     box-shadow: 0 0 15px rgba(77, 175, 255, 0.4);
     transform: translateY(-3px);
-  }
-  
+}
 
 .query-input {
     flex: 1;
@@ -358,10 +356,12 @@ body::before {
     backdrop-filter: blur(10px);
     animation: float 3s ease-in-out infinite;
 }
+
 /* Add more space between modal elements */
 .modal-content > *:not(:last-child) {
     margin-bottom: 20px; /* uniform spacing */
 }
+
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
@@ -623,42 +623,44 @@ body::before {
     overflow-y: hidden;
     padding-bottom: 0.5rem;
     scroll-snap-type: x mandatory; /* optional smooth snapping */
-  }
-  
-  /* Wider cards only inside Quick Summary */
-  #summary-output .summary-card {
+}
+
+/* Wider cards only inside Quick Summary */
+#summary-output .summary-card {
     flex: 0 0 1000px;    /* fixed width for each card */
     max-width: 1000px;
     scroll-snap-align: start;
-  }
+}
+
 /* Results panel default text */
 .results-area {
     color: #e6f2ff; /* soft white-blue default text */
-  }
-  
-  /* Headings in results */
-  .results-area h2,
-  .results-area h3,
-  .results-area h4,
-  .results-area strong {
+}
+
+/* Headings in results */
+.results-area h2,
+.results-area h3,
+.results-area h4,
+.results-area strong {
     color: #a5d8ff; /* light blue headings */
-  }
-  
-  /* Gradient text override for results */
-  .results-area .gradient-text {
+}
+
+/* Gradient text override for results */
+.results-area .gradient-text {
     background: linear-gradient(90deg, #4dafff, #e6f2ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent; /* fallback so no error */
-  }
-  
-  /* Card content text */
-  .results-area .card-content,
-  .results-area p,
-  .results-area li,
-  .results-area span {
+}
+
+/* Card content text */
+.results-area .card-content,
+.results-area p,
+.results-area li,
+.results-area span {
     color: #e6f7ff; /* softer white-blue for body */
-  }
+}
+
 /* Default typewriter + glow for larger screens */
 .subtitle {
     display: inline-block;
@@ -672,22 +674,22 @@ body::before {
                blink 0.7s step-end 3s, 
                glowPulse 2s ease-in-out 3s infinite;
     animation-fill-mode: forwards;
-  }
-  
-  /* Typing animation */
-  @keyframes typing {
+}
+
+/* Typing animation */
+@keyframes typing {
     from { width: 0 }
     to { width: 40% }
-  }
-  
-  /* Cursor blink */
-  @keyframes blink {
+}
+
+/* Cursor blink */
+@keyframes blink {
     50% { border-color: transparent }
     100% { border-color: transparent }
-  }
-  
-  /* Glow pulse effect */
-  @keyframes glowPulse {
+}
+
+/* Glow pulse effect */
+@keyframes glowPulse {
     0%, 100% {
       color: #a5d8ff;
       text-shadow: 0 0 0px #4dafff;
@@ -696,10 +698,10 @@ body::before {
       color: #ffffff;
       text-shadow: 0 0 20px #4dafff, 0 0 40px #1e90ff;
     }
-  }
-  
-  /* 📱 On small screens (mobile) → replace with scrolling marquee */
-  @media (max-width: 600px) {
+}
+
+/* 📱 On small screens (mobile) → replace with scrolling marquee */
+@media (max-width: 600px) {
     .subtitle {
       border-right: none;  /* remove typewriter cursor */
       width: 100%;
@@ -708,19 +710,20 @@ body::before {
       display: block;
       animation: scrollText 8s linear infinite; /* continuous scrolling */
     }
-  
+
     @keyframes scrollText {
       from { transform: translateX(100%); }
       to   { transform: translateX(-100%); }
     }
-  }
-  /* Pause marquee on hover/tap (mobile scrolling only) */
+}
+
+/* Pause marquee on hover/tap (mobile scrolling only) */
 @media (max-width: 600px) {
     .subtitle:hover {
       animation-play-state: paused;
     }
-  }
-  
+}
+
 /* Lists inside cards */
 #results .summary-card ul {
     list-style: disc;
@@ -728,11 +731,13 @@ body::before {
     padding-left: 1.25rem;
     margin: 0.5rem 0;
 }
+
 #results .summary-card ul ul {
     list-style: circle;
     padding-left: 1.25rem;
     margin: 0.25rem 0;
 }
+
 #results .summary-card li {
     margin: 0.25rem 0;
 }
@@ -749,6 +754,7 @@ body::before {
     gap: 0.5rem;
     margin-bottom: 0.25rem;
 }
+
 #results .copy-btn {
     background: rgba(0,0,0,0.3);
     border: 1.5px solid rgba(255,255,255,0.25);
@@ -761,11 +767,13 @@ body::before {
     cursor: pointer;
     transition: background 200ms ease, border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
+
 #results .copy-btn:hover {
     background: rgba(255,255,255,0.1);
     border-color: rgba(255,255,255,0.45);
     box-shadow: 0 0 12px rgba(51, 204, 255, 0.3);
 }
+
 #results .copy-btn.success {
     background: #16a34a;
     border-color: #16a34a;
@@ -779,6 +787,7 @@ body::before {
     gap: 0.75rem;
     padding: 0.75rem 0;
 }
+
 #results .spinner-ring {
     width: 36px;
     height: 36px;
@@ -787,10 +796,12 @@ body::before {
     border-top-color: #33ccff;
     animation: spin 1s linear infinite;
 }
+
 #results .thinking .msg {
     font-weight: 800;
     color: #33ccff;
 }
+
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* Analyze Modal Theming (Blue) */
@@ -888,61 +899,150 @@ body::before {
     color: rgba(102, 217, 255, 0.9);
 }
 
-/* 📱 Mobile-Friendly Fixes */
-@media (max-width: 768px) {
-    /* Reduce padding in results area */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px 15px;
+    }
+    
+    .action-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .query-section {
+        padding: 30px 20px;
+    }
     .results-area {
-      padding: 20px !important;
+        padding: 40px 20px;
     }
-  
-    /* Adjust big results heading */
-    .results-text {
-      font-size: 1.6rem !important;
-      text-align: center;
+    .header {
+        margin-bottom: 40px;
     }
-  
+    .modal-content {
+        padding: 20px;
+    }
+
+    /* Make action cards full width on mobile */
+    .action-grid {
+      grid-template-columns: 1fr;
+    }
+    .action-card {
+        padding: 20px;
+    }
+    .drop-zone {
+        padding: 20px;
+        min-height: 120px;
+    }
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    /* Reduce results panel padding for mobile */
+    .results-area {
+        padding: 20px;
+    }
+    /* Adjust summary cards for mobile */
+    #summary-output .summary-card {
+        flex: 0 0 90%;   /* each card takes ~90% of screen width */
+        max-width: 90%;
+    }
     /* Stack input field & button vertically */
     .input-container {
-      flex-direction: column;
-      align-items: stretch;
+        flex-direction: column;
+        align-items: stretch;
     }
-  
     .query-input {
-      width: 100%;
-      margin-bottom: 10px;
+        width: 100%;
+        margin-bottom: 10px;
     }
-  
     .submit-btn {
-      width: 100%;
-      height: 45px;
+        width: 100%;
+        height: 45px;
     }
-  }
-  
-  @media (max-width: 600px) {
-    /* Make summary cards fit phone screens */
-    #summary-output .summary-card {
-      flex: 0 0 90% !important;
-      max-width: 90% !important;
+}
+
+@media (max-width: 640px) {
+    .modal {
+        display: block; /* Override flex to ensure full-screen mobile behavior */
+        align-items: stretch; /* Ensure content stretches vertically */
+        padding: 0; /* Remove padding to maximize space */
+        backdrop-filter: blur(3px); /* Slightly reduce blur for performance */
+        transition: none; /* Disable transitions to prevent desktop view flash */
     }
-  
-    /* Smaller text for cards */
-    #results .summary-card {
-      font-size: 0.9rem !important;
+    .modal:not(.hidden) {
+        opacity: 1;
+        visibility: visible;
+        transition: none; /* Ensure immediate rendering */
     }
-  
-    /* Adjust main title */
-    .main-title {
-      font-size: 2rem !important;
-    }
-  
-    /* Tweak modal padding for smaller screens */
     .modal-content {
-      padding: 1rem !important;
+        width: 100vw; /* Full viewport width */
+        max-width: none; /* Remove max-width constraint */
+        height: 100vh; /* Full viewport height */
+        margin: 0; /* Remove margins */
+        padding: 15px; /* Reduced padding for mobile */
+        border-radius: 0; /* Remove border-radius for edge-to-edge look */
+        box-shadow: none; /* Remove shadow for cleaner mobile appearance */
+        overflow-y: auto; /* Allow scrolling for long content */
+        animation: none; /* Disable float animation to prevent layout shifts */
     }
-  
-    /* File list readability */
-    .file-list li {
-      font-size: 0.8rem !important;
+    .modal-header {
+        margin-bottom: 15px; /* Slightly reduce spacing */
     }
-  }
-  
+    .modal-title {
+        font-size: 1.3rem; /* Smaller title for mobile */
+    }
+    .modal-close {
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+    .modal-input {
+        font-size: 0.95rem; /* Slightly smaller font */
+        padding: 12px 15px 10px; /* Adjusted padding */
+    }
+    .modal-input-group .modal-input {
+        padding-left: 40px; /* Adjust for smaller icon */
+    }
+    .input-icon {
+        font-size: 1rem; /* Smaller icon */
+        top: 14px; /* Adjust vertical alignment */
+        left: 10px;
+    }
+    .drop-zone {
+        padding: 15px; /* Reduced padding */
+        min-height: 100px; /* Smaller drop zone */
+        font-size: 1rem; /* Smaller text */
+    }
+    .dz-invite {
+        font-size: 1rem; /* Smaller invite text */
+    }
+    .dz-hint {
+        font-size: 0.85rem; /* Smaller hint text */
+    }
+    .modal-btn {
+        padding: 8px 15px; /* Smaller button padding */
+        font-size: 0.95rem; /* Smaller button text */
+    }
+    .progress-container {
+        padding: 10px; /* Smaller padding */
+    }
+    .progress-label {
+        font-size: 0.85rem; /* Smaller label */
+    }
+    .progress-track {
+        height: 6px; /* Thinner progress bar */
+    }
+    /* Ensure Analyze modal inputs are mobile-friendly */
+    #aModal .a-field {
+        grid-template-columns: 28px 1fr; /* Smaller icon column */
+        gap: 10px; /* Smaller gap */
+    }
+    #aModal .a-field .modal-input {
+        padding-left: 10px; /* Adjust padding */
+    }
+    #aModal .a-field .input-icon {
+        font-size: 1rem; /* Smaller icon */
+    }
+}
