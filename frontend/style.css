@@ -888,7 +888,7 @@ body::before {
     color: rgba(102, 217, 255, 0.9);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     .container {
         padding: 20px 15px;
     }
@@ -914,7 +914,7 @@ body::before {
         padding: 20px;
     }
 }
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     /* Make action cards full width on mobile */
     .action-grid {
       grid-template-columns: 1fr;
