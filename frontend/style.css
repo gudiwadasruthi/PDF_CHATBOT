@@ -1,196 +1,589 @@
-/* Custom styles extracted from index.html */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-    background: var(--bg-base);
-    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
 }
 
-.go {
-    /* glass outer */
-    background: var(--outer-bg);
-    backdrop-filter: blur(var(--outer-blur));
-    -webkit-backdrop-filter: blur(var(--outer-blur));
-    border: 2px solid var(--outer-border);
-    box-shadow: var(--outer-shadow);
-    border-radius: 0.5rem;
+/* Animated background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, #ff3366 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, #33ccff 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, #ffcc33 0%, transparent 50%);
+    opacity: 0.1;
+    z-index: -1;
+    animation: backgroundShift 20s ease-in-out infinite;
 }
 
-.gi {
-    /* glass inner */
-    background: var(--panel-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 2px solid var(--panel-border);
-    box-shadow: var(--panel-shadow);
-    border-radius: var(--panel-radius);
-    color: var(--panel-text);
-
-    /* Animated gradient background */
-    background-size: 400% 400%;
-    animation: gradientShift 12s ease infinite;
+@keyframes backgroundShift {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
 }
 
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.main-title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #ff3366, #33ccff, #ffcc33);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    animation: gradientMove 3s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+    0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 
-.gi button,
-.gi input,
-.gi textarea {
-    border-color: var(--button-border);
-    background: var(--button-bg);
-    color: var(--button-text);
-    caret-color: currentColor;
-    transition: background 250ms ease, box-shadow 250ms ease, transform 250ms ease;
-    font-weight: 1000;
+.subtitle {
+    font-size: 1rem;
+    color: #888;
+    font-weight: 300;
+    letter-spacing: 1px;
 }
 
-/* Apply button visuals to non-button elements (e.g., header card) */
-.button-like {
-    border: 2px solid var(--button-border);
-    background: var(--button-bg);
-    color: var(--button-text);
-    font-weight: 1000;
-}
-.button-like:hover {
-    background: var(--button-hover-bg);
-    box-shadow: 0 0 20px var(--grad-1), 0 0 40px var(--grad-2);
-    transform: scale(1.00);
-    transition: all 250ms ease;
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
 }
 
-.gi button i,
-.gi button svg {
-    color: inherit; /* FontAwesome <i> */
-    fill: currentColor; /* SVG fill */
-    stroke: currentColor; /* SVG stroke */
-}
-
-.gi button:hover {
-    background: var(--button-hover-bg);
-    box-shadow: 0 0 20px var(--grad-1), 0 0 40px var(--grad-2);
-    transform: scale(1.05);
-    transition: all 250ms ease;
-}
-
-/* Inputs and textareas: hover like buttons (subtle scale) */
-.gi input:hover,
-.gi textarea:hover {
-    background: var(--button-hover-bg);
-    box-shadow: 0 0 20px var(--grad-1), 0 0 40px var(--grad-2);
-    transform: scale(1.02);
-}
-
-.gi input::placeholder,
-.gi textarea::placeholder {
-    color: var(--button-text);
-    opacity: 0.8;
-}
-
-.hidden {
-    display: none;
-}
-
-/* Themed border utility */
-.themed-border-2 {
-    border: 2px solid var(--panel-border);
-}
-
-/* Solid modal variant: force opaque dark backdrop via theme vars */
-.gi.modal-solid {
-    background: var(--modal-bg, rgba(17,24,39,0.96));
-    border: 2px solid var(--modal-border, var(--panel-border));
-    color: var(--modal-text, var(--text-primary));
-}
-
-/* Pulse + floating hover */
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-@keyframes floaty {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-.pulse-hover:hover {
-    animation: pulse 0.6s ease-in-out, floaty 3s ease-in-out infinite;
-}
-
-/* Brighten helper text under buttons on hover */
-.pulse-hover:hover .opacity-95 {
-    opacity: 1;
-}
-.pulse-hover .opacity-95 {
-    transition: opacity 200ms ease;
-}
-
-/* Hover shine effect for primary action buttons */
-.main-action-btn {
+.action-card {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    border: 2px solid #333;
+    border-radius: 16px;
+    padding: 25px 20px;
+    text-align: center;
     position: relative;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
 }
-.main-action-btn::before {
+
+.action-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-    pointer-events: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff3366, transparent);
+    transition: left 0.6s ease;
 }
-.main-action-btn:hover::before {
+
+.action-card:hover::before {
     left: 100%;
 }
 
-/* Results section */
-#results {
-    white-space: pre-wrap;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    max-height: none;
-    overflow: visible;
-    color: var(--results-text, var(--text-primary, #ffffff));
-    transition: background 250ms ease, box-shadow 250ms ease, transform 250ms ease;
-}
-#results .summary-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: var(--card-shadow);
-    margin-bottom: 1.5rem;
-    color: var(--card-text);
-    transition: transform 200ms ease, box-shadow 200ms ease;
-}
-#results .summary-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+.action-card:hover {
+    transform: translateY(-10px);
+    border-color: #ff3366;
+    box-shadow: 0 20px 40px rgba(255, 51, 102, 0.2);
 }
 
-/* Results panel: hover effects similar to buttons */
-#results:hover {
-    background: var(--button-hover-bg);
-    box-shadow: 0 0 20px var(--grad-1), 0 0 40px var(--grad-2);
+.action-card:nth-child(2):hover {
+    border-color: #33ccff;
+    box-shadow: 0 20px 40px rgba(51, 204, 255, 0.2);
+}
+
+.action-card:nth-child(3):hover {
+    border-color: #ffcc33;
+    box-shadow: 0 20px 40px rgba(255, 204, 51, 0.2);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #ff3366, #ff6699);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.action-card:nth-child(2) .card-icon {
+    background: linear-gradient(135deg, #33ccff, #66d9ff);
+}
+
+.action-card:nth-child(3) .card-icon {
+    background: linear-gradient(135deg, #ffcc33, #ffdd66);
+}
+
+.action-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.card-description {
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.card-meta {
+    color: #666;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.query-section {
+    background: linear-gradient(145deg, #111, #222);
+    border: 2px solid #333;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.query-section::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(45deg, #ff3366, #33ccff, #ffcc33);
+    background-size: 300% 300%;
+    border-radius: 24px;
+    z-index: -1;
+    animation: borderGlow 4s ease-in-out infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.query-section:hover::after {
+    opacity: 1;
+}
+
+@keyframes borderGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+
+/* Input container default */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  /* Hover effect for the whole container */
+  .input-container:hover {
+    border-color: #4dafff;
+    background: rgba(77, 175, 255, 0.08);
+    box-shadow: 0 0 15px rgba(77, 175, 255, 0.4);
+    transform: translateY(-3px);
+  }
+  
+
+.query-input {
+    flex: 1;
+    background: #000;
+    border: 2px solid #444;
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 1rem;
+    color: #fff;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.query-input::placeholder {
+    color: #666;
+}
+
+.query-input:focus {
+    border-color: #ff3366;
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.3);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #ff3366, #ff6699);
+    border: none;
+    border-radius: 12px;
+    width: 55px;
+    height: 55px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.submit-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(255, 51, 102, 0.4);
+}
+
+.results-area {
+    background: linear-gradient(135deg, #0f0f0f, #1f1f1f);
+    border: 2px solid #333;
+    border-radius: 24px;
+    padding: 60px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.results-area::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 51, 102, 0.1), transparent 70%);
+    transform: translate(-50%, -50%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+}
+
+.results-text {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.grid-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -2;
+}
+
+/* Utility: hide arbitrary elements (but not modals to preserve fade transitions) */
+.hidden:not(.modal) {
+    display: none;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.modal.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    border: 2px solid #333;
+    border-radius: 20px;
+    padding: 35px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    animation: float 3s ease-in-out infinite;
+}
+/* Add more space between modal elements */
+.modal-content > *:not(:last-child) {
+    margin-bottom: 20px; /* uniform spacing */
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Header icon for modals */
+.modal-header-icon {
+    color: #ff6699;
+    font-size: 1.2rem;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #ff3366, #ff6699);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-close:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+}
+
+.modal-input {
+    width: 100%;
+    background: #000;
+    border: 2px solid #444;
+    border-radius: 12px;
+    padding: 16px 15px 12px; /* extra top padding for consistent first-line alignment */
+    font-size: 1rem;
+    line-height: 1.4; /* stabilize text vertical metrics */
+    color: #fff;
+    margin-bottom: 15px;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.modal-input:focus {
+    border-color: #ff3366;
+    box-shadow: 0 0 15px rgba(255, 51, 102, 0.3);
+}
+
+/* Hover glow + subtle scale like buttons */
+.modal-input:hover {
+    background: linear-gradient(145deg, #0d0d0d, #1c1c1c);
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.35), 0 0 40px rgba(51, 204, 255, 0.2);
     transform: scale(1.02);
 }
 
-.gradient-text {
-    color: var(--grad-fallback, currentColor);
+.modal-input::placeholder {
+    color: #666;
 }
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .gradient-text {
-        background: linear-gradient(to right, var(--grad-1) 0%, var(--grad-2) 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        -webkit-text-fill-color: transparent;
-    }
+
+.modal-input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 16px; /* align with first text line (matches input top padding) */
+    transform: none;
+    color: #666;
+    font-size: 1.2rem;
+    pointer-events: none; /* allow clicks to focus the input */
+    transition: color 0.2s ease, filter 0.2s ease, transform 0.2s ease;
+}
+
+/* Ensure textarea placeholder aligns with the same row as inputs */
+.modal-input-group textarea.modal-input {
+    padding-top: 16px;
+    line-height: 1.4;
+}
+
+.modal-input-group .modal-input {
+    padding-left: 48px; /* extra space so text doesn't crowd the icon */
+}
+
+.drop-zone {
+    background: linear-gradient(145deg, #111, #222);
+    border: 2px dashed #444;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    min-height: 150px;
+    font-size: 1.1rem;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.drop-zone:hover {
+    border-color: #ff3366;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.35), 0 0 40px rgba(51, 204, 255, 0.2);
+    transform: scale(1.02);
+}
+
+/* Dragover visual state (from JS toggling is-dragover) */
+.drop-zone.is-dragover {
+    border-color: #ff3366;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+.dz-invite {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.dz-hint {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.file-list {
+    list-style: none;
+    color: #bbb;
+    margin-top: 10px;
+    padding-left: 0;
+}
+
+.progress-container {
+    margin-top: 20px;
+    background: #000;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.progress-label {
+    color: #bbb;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.progress-track {
+    background: #333;
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(135deg, #ff3366, #ff6699);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-bar.error {
+    background: linear-gradient(135deg, #ff3366, #cc3333) !important;
+}
+
+.modal-note {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.modal-btn {
+    background: linear-gradient(135deg, #ff3366, #ff6699);
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+}
+
+.modal-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #ff3366, #33ccff, #ffcc33);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientMove 3s ease-in-out infinite;
+}
+
+/* Results panel and summary cards (ported from frontend, adapted to this theme) */
+#results {
+    white-space: pre-wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    color: #ffffff;
+    transition: background 250ms ease, box-shadow 250ms ease, transform 250ms ease;
+}
+
+#results:hover {
+    background: linear-gradient(145deg, #0d0d0d, #1c1c1c);
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.25), 0 0 40px rgba(51, 204, 255, 0.25);
+    transform: scale(1.02);
 }
 
 /* Horizontal strip for document summary cards */
-.summary-grid {
+#results .summary-grid {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -202,6 +595,129 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
+/* Summary cards */
+#results .summary-card {
+    background: linear-gradient(135deg, #0f0f0f, #1f1f1f);
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 1rem;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    min-width: 280px;
+    scroll-snap-align: start;
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+#results .summary-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: #ff3366;
+    box-shadow: 0 10px 25px rgba(255, 51, 102, 0.25);
+}
+
+/* Only affect Quick Summary results */
+#summary-output .summary-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    overflow-x: auto;   /* enables horizontal scrolling */
+    overflow-y: hidden;
+    padding-bottom: 0.5rem;
+    scroll-snap-type: x mandatory; /* optional smooth snapping */
+  }
+  
+  /* Wider cards only inside Quick Summary */
+  #summary-output .summary-card {
+    flex: 0 0 1000px;    /* fixed width for each card */
+    max-width: 1000px;
+    scroll-snap-align: start;
+  }
+/* Results panel default text */
+.results-area {
+    color: #e6f2ff; /* soft white-blue default text */
+  }
+  
+  /* Headings in results */
+  .results-area h2,
+  .results-area h3,
+  .results-area h4,
+  .results-area strong {
+    color: #a5d8ff; /* light blue headings */
+  }
+  
+  /* Gradient text override for results */
+  .results-area .gradient-text {
+    background: linear-gradient(90deg, #4dafff, #e6f2ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* fallback so no error */
+  }
+  
+  /* Card content text */
+  .results-area .card-content,
+  .results-area p,
+  .results-area li,
+  .results-area span {
+    color: #e6f7ff; /* softer white-blue for body */
+  }
+/* Default typewriter + glow for larger screens */
+.subtitle {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid #4dafff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #a5d8ff;
+    animation: typing 3s steps(30, end), 
+               blink 0.7s step-end 3s, 
+               glowPulse 2s ease-in-out 3s infinite;
+    animation-fill-mode: forwards;
+  }
+  
+  /* Typing animation */
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 40% }
+  }
+  
+  /* Cursor blink */
+  @keyframes blink {
+    50% { border-color: transparent }
+    100% { border-color: transparent }
+  }
+  
+  /* Glow pulse effect */
+  @keyframes glowPulse {
+    0%, 100% {
+      color: #a5d8ff;
+      text-shadow: 0 0 0px #4dafff;
+    }
+    50% {
+      color: #ffffff;
+      text-shadow: 0 0 20px #4dafff, 0 0 40px #1e90ff;
+    }
+  }
+  
+  /* 📱 On small screens (mobile) → replace with scrolling marquee */
+  @media (max-width: 600px) {
+    .subtitle {
+      border-right: none;  /* remove typewriter cursor */
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      display: block;
+      animation: scrollText 8s linear infinite; /* continuous scrolling */
+    }
+  
+    @keyframes scrollText {
+      from { transform: translateX(100%); }
+      to   { transform: translateX(-100%); }
+    }
+  }
+  
+  
+  
+  
 /* Lists inside cards */
 #results .summary-card ul {
     list-style: disc;
@@ -217,88 +733,9 @@ body {
 #results .summary-card li {
     margin: 0.25rem 0;
 }
+
 #results .summary-card li::marker {
-    color: var(--card-text);
-}
-
-/* Upload modal: Drag & Drop zone and file list */
-.gi .drop-zone {
-    background: var(--card-bg);
-    border: 2px dashed var(--dropzone-border);
-    color: var(--card-text);
-    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, background 250ms ease;
-}
-.gi .drop-zone:hover {
-    border-color: var(--dropzone-border);
-    background: var(--button-hover-bg);
-    box-shadow: 0 0 20px var(--grad-1), 0 0 40px var(--grad-2);
-    transform: scale(1.02);
-}
-.gi .drop-zone.is-dragover {
-    border-color: var(--grad-1);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    transform: translateY(-1px);
-}
-.gi .drop-zone .dz-invite {
-    margin-bottom: 0.25rem;
-}
-.gi .file-list {
-    list-style: disc;
-    padding-left: 1.25rem;
-    margin: 0.25rem 0 0;
-}
-.gi .file-list li {
-    margin: 0.15rem 0;
-    color: var(--panel-text);
-}
-
-/* Upload progress bar with shimmer */
-.gi .progress-track {
-    width: 100%;
-    height: 14px;
-    background: var(--progress-track-bg);
-    border-radius: 9999px;
-    overflow: hidden;
-    border: 1px solid var(--progress-track-border);
-}
-.gi .progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(120deg, var(--grad-1), var(--grad-2), var(--grad-1));
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite linear;
-    transition: width 200ms ease;
-}
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-.gi .progress-bar.error {
-    background: #dc2626;
-}
-
-/* Spinner / Thinking */
-#results .thinking {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
-}
-#results .thinking .spinner-ring {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 4px solid rgba(255,255,255,0.25);
-    border-top-color: var(--button-text);
-    animation: spin 1s linear infinite;
-}
-#results .thinking .msg {
-    font-weight: 800;
-    color: var(--button-text);
-    -webkit-text-fill-color: var(--button-text);
-}
-@keyframes spin {
-    to { transform: rotate(360deg); }
+    color: #cccccc;
 }
 
 /* Card headers and copy buttons */
@@ -310,19 +747,21 @@ body {
     margin-bottom: 0.25rem;
 }
 #results .copy-btn {
-    background: var(--copy-btn-bg);
-    border: 1.5px solid var(--copy-btn-border);
-    color: var(--copy-btn-text);
+    background: rgba(0,0,0,0.3);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    color: #ffffff;
     border-radius: 9999px;
     padding: 2px 10px;
     font-size: 12px;
     line-height: 18px;
     font-weight: 800;
     cursor: pointer;
+    transition: background 200ms ease, border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
 #results .copy-btn:hover {
-    background: rgba(0,0,0,0.04);
-    border-color: rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.45);
+    box-shadow: 0 0 12px rgba(51, 204, 255, 0.3);
 }
 #results .copy-btn.success {
     background: #16a34a;
@@ -330,380 +769,145 @@ body {
     color: #fff;
 }
 
-/* Theme selector */
-#themeSelect {
-    appearance: none;
-    -webkit-appearance: none;
-    background-color: rgba(15,23,42,0.85);
-    color: #ffffff;
-    border: 1.5px solid rgba(255,255,255,0.6);
-    border-radius: 9999px;
-    padding: 6px 34px 6px 12px;
+/* Spinner / Thinking */
+#results .thinking {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+}
+#results .spinner-ring {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.25);
+    border-top-color: #33ccff;
+    animation: spin 1s linear infinite;
+}
+#results .thinking .msg {
     font-weight: 800;
-    line-height: 1.25;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    cursor: pointer;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="white"><path d="M5.5 7.5l4.5 5 4.5-5"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 14px 14px;
+    color: #33ccff;
 }
-#themeSelect:hover {
-    border-color: #ffffff;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
-}
-#themeSelect:focus {
-    outline: 2px solid rgba(255,255,255,0.85);
-    outline-offset: 2px;
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Analyze Modal Theming (Blue) */
+#aModal .modal-header-icon {
+    color: #33ccff;
 }
 
-/* Ask input glow effect */
-form input:focus {
-    outline: none;
-    box-shadow: 0 0 10px var(--grad-1), 0 0 20px var(--grad-2);
-    border-color: var(--grad-2);
-    transition: all 200ms ease;
+#aModal .modal-close {
+    background: linear-gradient(135deg, #33ccff, #66d9ff);
 }
 
-/* Typewriter animation (for tagline) */
-.tagline {
-  display: inline-block;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  animation: printText 4s steps(30, end) forwards;
+#aModal .modal-close:hover {
+    box-shadow: 0 5px 15px rgba(51, 204, 255, 0.4);
 }
 
-@keyframes printText {
-  from { width: 0 }
-  to { width: 100% }
+#aModal .modal-btn {
+    background: linear-gradient(135deg, #33ccff, #66d9ff);
 }
 
-/* ===== Theme System (CSS variables + overrides) ===== */
-/* Variables */
-:root,
-:root[data-theme="legacy"] {
-  --bg-base: #ffffff;
-  --outer-bg: rgba(255,255,255,0.1);
-  --outer-border: rgba(255,255,255,0.3);
-  --outer-shadow: 0 4px 30px rgba(0,0,0,0.1);
-  --outer-blur: 10px;
-
-  --panel-bg: linear-gradient(135deg, #333399cc 0%, #FF00CCcc 100%);
-  --panel-border: rgba(255,255,255,0.4);
-  --panel-shadow: 0 8px 32px 0 rgba(255,0,204,0.25);
-  --panel-radius: 8px;
-  --panel-text: #ffffff;
-
-  --text-primary: #ffffff;
-  --results-text: #ffffff;
-
-  --grad-1: #333399cc;
-  --grad-2: #FF00CCcc;
-  --grad-fallback: #333399;
-
-  --button-bg: rgba(255,255,255,0.15);
-  --button-text: #ffffff;
-  --button-border: rgba(255,255,255,0.7);
-  --button-hover-bg: rgba(255,255,255,0.3);
-
-  --progress-track-bg: rgba(255,255,255,0.2);
-  --progress-track-border: rgba(255,255,255,0.4);
-
-  --card-bg: #ffffff;
-  --card-text: #111111;
-  --card-shadow: 0 4px 10px rgba(0,0,0,0.1);
-
-  --dropzone-border: rgba(0,0,0,0.2);
-
-  --copy-btn-bg: #ffffff;
-  --copy-btn-border: rgba(0,0,0,0.15);
-  --copy-btn-text: #111111;
-
-  --select-bg: rgba(255,255,255,0.15);
-  --select-text: #ffffff;
-  --select-border: rgba(255,255,255,0.7);
+#aModal .modal-btn:hover {
+    box-shadow: 0 5px 15px rgba(51, 204, 255, 0.4);
 }
 
-
-:root[data-theme="light"] {
-  /* Background */
-  --bg-base: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
-
-  /* Outer container */
-  --outer-bg: #ffffff;
-  --outer-border: #e0e0e0;
-  --outer-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  --outer-blur: 0px;
-
-  /* Panels */
-  --panel-bg: rgba(255, 255, 255, 0.9);
-  --panel-border: #e0e0e0;
-  --panel-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  --panel-radius: 14px;
-  --panel-text: #444444;
-
-  /* Text */
-  --text-primary: #333333;
-  --results-text: #333333;
-
-  /* Accent Gradient */
-  --grad-1: #2979ff;
-  --grad-2: #5ea8ff;
-  --grad-fallback: #2979ff;
-
-  /* Buttons */
-  --button-bg: #ffffff;
-  --button-text: #333333;
-  --button-border: #d0d0d0;
-  --button-hover-bg: #e6f0ff;  /* blue glow */
-  --button-hover-border: #c9dfff;
-
-  /* Progress Bars */
-  --progress-track-bg: #f0f0f0;
-  --progress-track-border: #d9d9d9;
-
-  /* Cards */
-  --card-bg: #ffffff;
-  --card-text: #333333;
-  --card-shadow: 0 6px 14px rgba(0,0,0,0.08);
-
-  /* Drop Zone */
-  --dropzone-border: #b0cfff;
-
-  /* Copy Button */
-  --copy-btn-bg: #ffffff;
-  --copy-btn-border: #d0d0d0;
-  --copy-btn-text: #333333;
-
-  /* Select Inputs (if reused anywhere else) */
-  --select-bg: #ffffff;
-  --select-text: #333333;
-  --select-border: #d0d0d0;
+#aModal .modal-input:focus {
+    border-color: #33ccff;
+    box-shadow: 0 0 15px rgba(51, 204, 255, 0.3);
 }
 
+#aModal .modal-input:hover {
+    box-shadow: 0 0 20px rgba(51, 204, 255, 0.35), 0 0 40px rgba(51, 204, 255, 0.2);
+}
 
-:root[data-theme="glass-dark"] {
-    --bg-base: radial-gradient(circle at 20% 20%, rgba(0,180,255,0.15), transparent 60%),
-               radial-gradient(circle at 80% 80%, rgba(255,0,150,0.12), transparent 60%),
-               linear-gradient(135deg, #1f2937 0%, #2b3a4b 100%);
+#aModal .progress-bar {
+    background: linear-gradient(135deg, #33ccff, #66d9ff);
+}
+
+/* Make icon react when the Analyze input group is hovered or focused */
+#aModal .modal-input-group:hover .input-icon,
+#aModal .modal-input-group:focus-within .input-icon {
+    color: #66d9ff;
+    filter: drop-shadow(0 0 6px rgba(51, 204, 255, 0.45));
+}
+
+/* Make the input border and placeholder react with the icon */
+#aModal .modal-input-group:hover .modal-input,
+#aModal .modal-input-group:focus-within .modal-input {
+    border-color: #33ccff;
+    box-shadow: 0 0 20px rgba(51, 204, 255, 0.35), 0 0 40px rgba(51, 204, 255, 0.2);
+}
+
+#aModal .modal-input::placeholder {
+    color: rgba(102, 217, 255, 0.65);
+    transition: color 0.2s ease;
+}
+
+#aModal .modal-input-group:hover .modal-input::placeholder,
+#aModal .modal-input-group:focus-within .modal-input::placeholder {
+    color: rgba(102, 217, 255, 0.9);
+}
+
+/* Analyze modal: grid layout for icon + input when using a-field */
+#aModal .a-field {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+#aModal .a-field .input-icon {
+    position: static;
+    left: auto;
+    top: auto;
+    font-size: 1.1rem;
+    color: #99e6ff;
+}
+
+#aModal .a-field .modal-input {
+    padding-left: 12px; /* override absolute-icon padding */
+}
+
+#aModal .a-field:hover .input-icon,
+#aModal .a-field:focus-within .input-icon {
+    color: #66d9ff;
+    filter: drop-shadow(0 0 6px rgba(51, 204, 255, 0.45));
+}
+
+#aModal .a-field:hover .modal-input,
+#aModal .a-field:focus-within .modal-input {
+    border-color: #33ccff;
+    box-shadow: 0 0 20px rgba(51, 204, 255, 0.35), 0 0 40px rgba(51, 204, 255, 0.2);
+}
+
+#aModal .a-field:hover .modal-input::placeholder,
+#aModal .a-field:focus-within .modal-input::placeholder {
+    color: rgba(102, 217, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 15px;
+    }
     
-    --outer-bg: rgba(255,255,255,0.05);
-    --outer-border: rgba(255,255,255,0.15);
-    --outer-shadow: 0 16px 40px rgba(0,0,0,0.45);
-    --outer-blur: 18px;
-  
-    --panel-bg: rgba(255,255,255,0.08);
-    --panel-border: rgba(255,255,255,0.25);
-    --panel-shadow: 0 12px 28px rgba(0,0,0,0.45);
-    --panel-radius: 16px;
-    --panel-text: #e5e5e5;
-  
-    --text-primary: #ffffff;
-    --results-text: #ffffff;
-  
-    --grad-1: #ffffff;
-    --grad-2: #ffffff;
-    --grad-fallback: #ffffff;
-  
-    --button-bg: rgba(255,255,255,0.1);
-    --button-text: #ffffff;
-    --button-border: rgba(255,255,255,0.25);
-    --button-hover-bg: rgba(255,255,255,0.2);
-  
-    --progress-track-bg: rgba(255,255,255,0.15);
-    --progress-track-border: rgba(255,255,255,0.25);
-  
-    --card-bg: rgba(255,255,255,0.06);
-    --card-text: #f0f0f0;
-    --card-shadow: 0 10px 24px rgba(0,0,0,0.5);
-  
-    --dropzone-border: rgba(255,255,255,0.25);
-  
-    --copy-btn-bg: rgba(255,255,255,0.1);
-    --copy-btn-border: rgba(255,255,255,0.25);
-    --copy-btn-text: #ffffff;
-  
-    --select-bg: rgba(255,255,255,0.1);
-    --select-text: #ffffff;
-    --select-border: rgba(255,255,255,0.25);
-  }
-  
-  
-  :root[data-theme="roseanna"] {
-    --bg-base: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.25), transparent 60%),
-               linear-gradient(135deg, #FFAFBD 0%, #FFC3A0 100%);
-  
-    --outer-bg: rgba(255, 255, 255, 0.2);
-    --outer-border: rgba(255, 255, 255, 0.4);
-    --outer-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
-    --outer-blur: 14px;
-  
-    --panel-bg: rgba(255, 255, 255, 0.25);
-    --panel-border: rgba(255, 255, 255, 0.45);
-    --panel-shadow: 0 18px 36px rgba(0, 0, 0, 0.25);
-    --panel-radius: 18px;
-    --panel-text: #5c2e2e;
-  
-    --text-primary: #4A2C2A;
-    --results-text: #4A2C2A;
-  
-    --grad-1: #4A2C2A;
-    --grad-2: #4A2C2A;
-    --grad-fallback: #4A2C2A;
-  
-    --button-bg: rgba(255,255,255,0.2);
-    --button-text: #4A2C2A;
-    --button-border: currentColor;
-    --button-hover-bg: rgba(255, 255, 255, 0.5);
-  
-    --progress-track-bg: rgba(255,255,255,0.3);
-    --progress-track-border: rgba(255,255,255,0.45);
-  
-    --card-bg: rgba(255,255,255,0.65);
-    --card-text: #4A2C2A;
-    --card-shadow: 0 12px 28px rgba(74,44,42,0.25);
-  
-    --dropzone-border: rgba(0,0,0,0.25);
-  
-    --copy-btn-bg: rgba(255,255,255,0.8);
-    --copy-btn-border: rgba(0,0,0,0.15);
-    --copy-btn-text: #4A2C2A;
-  
-    --select-bg: rgba(255,255,255,0.25);
-    --select-text: #4A2C2A;
-    --select-border: rgba(255,255,255,0.6);
-  }
-  
+    .action-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .query-section {
+        padding: 30px 20px;
+    }
+    
+    .results-area {
+        padding: 40px 20px;
+    }
+    
+    .header {
+        margin-bottom: 40px;
+    }
 
-/* Honey Drew Theme */
-:root[data-theme="honey-drew"] {
-    --bg-base: linear-gradient(135deg, #43C6AC 0%, #F8FFAE 100%);
-    --outer-bg: rgba(255, 255, 255, 0.15);
-    --outer-border: rgba(255, 255, 255, 0.35);
-    --outer-shadow: 0 8px 35px rgba(0, 0, 0, 0.12);
-    --outer-blur: 12px;
-  
-    /* Panels */
-    --panel-bg: rgba(255, 255, 255, 0.14);
-    --panel-border: rgba(255, 255, 255, 0.4);
-    --panel-shadow: 0 18px 38px rgba(0, 0, 0, 0.18);
-    --panel-radius: 16px;
-  
-    /* Text */
-    --panel-text: #1F4E4E;
-    --text-primary: #1F4E4E;
-    --results-text: #1F4E4E;
-  
-    /* Accents & Gradients */
-    --grad-1: #1F4E4E;
-    --grad-2: #1F4E4E;
-    --grad-fallback: #1F4E4E;
-  
-    /* Buttons */
-    --button-bg: rgba(255, 255, 255, 0.15);
-    --button-text: #1F4E4E;
-    --button-border: currentColor; /* matches font color */
-    --button-hover-bg: rgba(255, 255, 255, 0.3);
-  
-    /* Progress Bars */
-    --progress-track-bg: rgba(255, 255, 255, 0.25);
-    --progress-track-border: rgba(255, 255, 255, 0.45);
-  
-    /* Cards */
-    --card-bg: rgba(255, 255, 255, 0.92); /* less transparent */
-    --card-text: #1F4E4E;
-    --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  
-    /* Drop Zone */
-    --dropzone-border: rgba(0, 0, 0, 0.25);
-  
-    /* Copy Button */
-    --copy-btn-bg: #ffffff;
-    --copy-btn-border: rgba(0, 0, 0, 0.15);
-    --copy-btn-text: #1F4E4E;
-  
-    /* Select Inputs */
-    --select-bg: rgba(255, 255, 255, 0.18);
-    --select-text: #1F4E4E;
-    --select-border: rgba(255, 255, 255, 0.6);
-  }
-  
-  /* Solid modals for Honey Drew */
-  :root[data-theme="honey-drew"] #uModal .gi,
-  :root[data-theme="honey-drew"] #aModal .gi,
-  :root[data-theme="honey-drew"] #tModal .gi {
-    background: #ffffff; /* solid white for panels */
-    border: 2px solid var(--panel-border);
-    box-shadow: var(--panel-shadow);
-    border-radius: var(--panel-radius);
-  }
-  
-  /* Header gradient text for Honey Drew */
-  :root[data-theme="honey-drew"] h1 {
-    background: linear-gradient(90deg, #43C6AC, #1F4E4E);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
-  
-
-/* Sapphire Drift Theme */
-:root[data-theme="sapphire-drift"] {
-  --bg-base: linear-gradient(135deg, #0A0F3C 0%, #2C5DA9 50%, #C8DAF9 100%);
-  --outer-bg: rgba(255, 255, 255, 0.1);
-  --outer-border: rgba(255, 255, 255, 0.25);
-  --outer-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-  --outer-blur: 14px;
-  --panel-bg: rgba(255, 255, 255, 0.1);
-  --panel-border: rgba(255, 255, 255, 0.35);
-  --panel-shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
-  --panel-radius: 18px;
-  --panel-text: #e4eaff;
-  --text-primary: #ffffff;
-  --results-text: #ffffff;
-  --grad-1: #2C5DA9;
-  --grad-2: #2C5DA9;
-  --grad-fallback: #2C5DA9;
-  --button-bg: rgba(255, 255, 255, 0.15);
-  --button-text: #ffffff;
-  --button-border: rgba(255, 255, 255, 0.55);
-  --button-hover-bg: rgba(255, 255, 255, 0.25);
-  --progress-track-bg: rgba(255, 255, 255, 0.2);
-  --progress-track-border: rgba(255, 255, 255, 0.4);
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --card-text: #111111;
-  --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  --dropzone-border: rgba(0, 0, 0, 0.2);
-  --copy-btn-bg: #ffffff;
-  --copy-btn-border: rgba(0, 0, 0, 0.15);
-  --copy-btn-text: #111111;
-  --select-bg: rgba(255, 255, 255, 0.15);
-  --select-text: #ffffff;
-  --select-border: rgba(255, 255, 255, 0.55);
+    .modal-content {
+        padding: 20px;
+    }
 }
-
-
-/* Overrides removed: base rules above already use theme variables */
-
-/* Theme selector */
-#themeSelect {
-  appearance: none;
-  -webkit-appearance: none;
-  background-color: rgba(15,23,42,0.85); /* dark slate */
-  color: #ffffff;
-  border: 1.5px solid rgba(255,255,255,0.6);
-  border-radius: 9999px;
-  padding: 6px 34px 6px 12px; /* room for arrow */
-  font-weight: 800;
-  line-height: 1.25;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-  cursor: pointer;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="white"><path d="M5.5 7.5l4.5 5 4.5-5"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 14px 14px;
-}
-#themeSelect:hover { border-color: #ffffff; box-shadow: 0 10px 28px rgba(0,0,0,0.35); }
-#themeSelect:focus { outline: 2px solid rgba(255,255,255,0.85); outline-offset: 2px; }
