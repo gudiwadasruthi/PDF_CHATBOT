@@ -42,10 +42,10 @@ Built for the **Adobe Hackathon 2025**, it supports:
 - Drag-and-drop PDF upload modal with file list, progress bar, and toast notifications
 - Persona & Task inputs inside an Analyze modal for customized document analysis
 - Results panel that displays:
-     . Subsection analysis (bullet-pointed insights with scores)
-     . Extracted sections from documents
-     . Quick summaries per PDF (scrollable summary cards)
-     . Explanations for user queries (“Ask Anything” form)
+     - Subsection analysis (bullet-pointed insights with scores)
+     - Extracted sections from documents
+     - Quick summaries per PDF (scrollable summary cards)
+     - Explanations for user queries (“Ask Anything” form)
 - Interactive UX elements: copy-to-clipboard buttons, thinking/loading spinners, auto-closing modals
 - Progress feedback: smooth progress indicators for both upload and analysis steps
 - Theme switching support (saved in localStorage)
