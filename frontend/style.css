@@ -634,7 +634,7 @@ body::before {
 
 /* Results panel default text */
 .results-area {
-    color: #e6f2ff; /* soft white-blue default text */
+    color: #ffffff; /* soft white-blue default text */
 }
 
 /* Headings in results */
@@ -658,7 +658,7 @@ body::before {
 .results-area p,
 .results-area li,
 .results-area span {
-    color: #e6f7ff; /* softer white-blue for body */
+    color: #ffffff; /* softer white-blue for body */
 }
 
 /* Default typewriter + glow for larger screens */

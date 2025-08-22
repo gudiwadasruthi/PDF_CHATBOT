@@ -26,29 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const taskIn = document.getElementById('task');
   const askForm = document.querySelector('form');
   const askInput = askForm?.querySelector('input[type="text"]');
-  const themeSelect = document.getElementById('themeSelect');
 
-  // Theme switching
-  function applyTheme(theme) {
-      try {
-          const t = theme || 'legacy';
-          document.documentElement.setAttribute('data-theme', t);
-      } catch (_) {}
-  }
-  function initTheme() {
-      try {
-          const saved = localStorage.getItem('rw_theme');
-          const theme = saved || 'legacy';
-          applyTheme(theme);
-          if (themeSelect) themeSelect.value = theme;
-      } catch (_) { applyTheme('legacy'); }
-  }
-  initTheme();
-  themeSelect?.addEventListener('change', (e) => {
-      const val = e.target?.value || 'legacy';
-      applyTheme(val);
-      try { localStorage.setItem('rw_theme', val); } catch (_) {}
-  });
 
   // Helpers
   function renderJSON(obj) {
