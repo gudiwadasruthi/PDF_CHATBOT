@@ -37,14 +37,19 @@ Built for the **Adobe Hackathon 2025**, it supports:
 ## ✨ Features
 
 ### 🖥️ Frontend
-- Modern, responsive UI (HTML, CSS, Vanilla JS)
-- Drag-and-drop PDF upload modal
-- Persona & Job inputs for tailored analysis
-- Analysis results as clean, readable cards
-- “Ask Anything” form for follow-up queries
-- Progress bars for upload/analysis
-- Theme selector (saved in browser storage)
-- No embedded PDF viewer
+- Modern, responsive UI built with HTML, CSS, and Vanilla JavaScript
+- Animated design: gradient backgrounds, glowing borders, and smooth hover effects
+- Drag-and-drop PDF upload modal with file list, progress bar, and toast notifications
+- Persona & Task inputs inside an Analyze modal for customized document analysis
+- Results panel that displays:
+      Subsection analysis (bullet-pointed insights with scores)
+      Extracted sections from documents
+      Quick summaries per PDF (scrollable summary cards)
+      Explanations for user queries (“Ask Anything” form)
+- Interactive UX elements: copy-to-clipboard buttons, thinking/loading spinners, auto-closing modals
+- Progress feedback: smooth progress indicators for both upload and analysis steps
+- Theme switching support (saved in localStorage)
+- Mobile-friendly layout: stacked cards, full-screen modals, and scrollable summaries
 
 ### ⚙️ Backend
 - FastAPI server for PDF processing & AI analysis
@@ -64,10 +69,11 @@ Built for the **Adobe Hackathon 2025**, it supports:
 ## 🛠 Tech Stack
 
 **Frontend**
-- HTML, CSS, Vanilla JavaScript
-- Tailwind CSS (CDN), Bootstrap 5.3.3 (CDN), Font Awesome (CDN)
-- Fetch API + XMLHttpRequest (for progress)
-- Static site — no build tools
+- HTML, CSS, Vanilla JavaScript (fully custom, no frameworks)
+- Font Awesome (CDN) for icons
+- Custom animations & responsive design with pure CSS
+- Fetch API + XMLHttpRequest for backend communication and progress tracking
+- Static site — runs without build tools or bundlers
 
 **Backend**
 - Python 3.9+, FastAPI 0.110.0, Uvicorn 0.29.0
