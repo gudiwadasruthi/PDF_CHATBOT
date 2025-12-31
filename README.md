@@ -81,7 +81,7 @@ No scrolling. No guessing. Just answers.
 
 ### 🏠 Home Dashboard
 <p align="center">
-  <img src="assets/screenshots/home.png" width="85%">
+  <img src="assets/screenshots/home.png" width="90%">
 </p>
 <p align="center"><i>Clean landing dashboard with quick actions for PDF analysis</i></p>
 
@@ -89,7 +89,7 @@ No scrolling. No guessing. Just answers.
 
 ### 📂 Upload PDFs
 <p align="center">
-  <img src="assets/screenshots/upload-modal.png" width="75%">
+  <img src="assets/screenshots/upload-modal.png" width="90%">
 </p>
 <p align="center"><i>Drag-and-drop PDF upload with multi-file support</i></p>
 
@@ -97,7 +97,7 @@ No scrolling. No guessing. Just answers.
 
 ### ⚙️ Analysis Settings (Persona & Task)
 <p align="center">
-  <img src="assets/screenshots/analyze-settings.png" width="55%">
+  <img src="assets/screenshots/analyze-settings.png" width="90%">
 </p>
 <p align="center"><i>Define persona and job-to-be-done for focused analysis</i></p>
 
@@ -105,7 +105,7 @@ No scrolling. No guessing. Just answers.
 
 ### 💬 Ask Anything Interface
 <p align="center">
-  <img src="assets/screenshots/ask-query.png" width="65%">
+  <img src="assets/screenshots/ask-query.png" width="90%">
 </p>
 <p align="center"><i>Ask natural language questions across uploaded PDFs</i></p>
 
@@ -113,7 +113,7 @@ No scrolling. No guessing. Just answers.
 
 ### 🧠 AI-Powered Insights & Results
 <p align="center">
-  <img src="assets/screenshots/results.png" width="45%">
+  <img src="assets/screenshots/results.png" width="90%">
 </p>
 <p align="center"><i>Structured explanations, summaries, and extracted sections</i></p>
 
